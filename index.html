@@ -935,6 +935,11 @@ function goTo(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const el = document.getElementById(id);
   if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+  // Refresh share link when wishlist page is shown
+  if (id === 'wishlist-page' && window.currentWishlistUrl) {
+    const shareEl = document.getElementById('share-link-input');
+    if (shareEl) shareEl.value = window.currentWishlistUrl;
+  }
 }
 window.goTo = goTo;
 
@@ -1143,8 +1148,16 @@ function generateWishlist() {
         if (result && result.shareToken) {
           const shareUrl = window.location.origin + '?wishlist=' + result.shareToken;
           console.log('Share URL generated:', shareUrl);
+          // Store token globally so it persists
+          window.currentShareToken = result.shareToken;
+          window.currentWishlistUrl = shareUrl;
+          // Update the input field
           const el = document.getElementById('share-link-input');
-          if (el) el.value = shareUrl;
+          if (el) {
+            el.value = shareUrl;
+            // Force a visual update
+            el.dispatchEvent(new Event('change'));
+          }
         } else {
           console.warn('No result or shareToken from Firebase');
           showError();
