@@ -1329,7 +1329,7 @@ function enterEditMode() {
 async function saveNewTasksToExistingWishlist() {
   if (typeof window.addTasksToWishlist === 'function') {
     // Only save tasks that don't have a Firestore-style long ID yet (newly added ones)
-    const newTasks = state.selectedTasks.filter(t => String(t.id).length < 15);
+    const newTasks = state.selectedTasks.filter(t => String(t.id).indexOf('.') !== -1);
     if (newTasks.length > 0) {
       await window.addTasksToWishlist(window.currentWishlistId, newTasks);
     }
@@ -1392,7 +1392,7 @@ function confirmClaim() {
     task.claimedBy = name;
     task.claimerEmail = email;
     state.lastClaimedTask = task;
-    if (typeof window.claimTaskInFirebase === 'function' && task.id.toString().length > 10) {
+    if (typeof window.claimTaskInFirebase === 'function' && task.id.toString().indexOf('.') === -1 && task.id.toString().length >= 15) {
       // Gather griever info from state
       const grieversNotes = [];
       if (state.user.allergies) grieversNotes.push('Allergies: ' + state.user.allergies);
