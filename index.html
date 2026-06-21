@@ -715,7 +715,10 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copy Link</button>
     </div>
     <div class="task-cards" id="task-cards-list"></div>
-    <button class="view-wishlist-btn" onclick="goTo('dashboard')">&#9825; View My Dashboard</button>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="view-wishlist-btn" onclick="goTo('dashboard')">&#9825; View My Dashboard</button>
+      <button class="view-wishlist-btn" id="edit-wishlist-btn" onclick="enterEditMode()" style="display:none; border-color:var(--periwinkle); color:var(--periwinkle);">+ Add More to My List</button>
+    </div>
   </div>
 </div>
 
@@ -1121,6 +1124,15 @@ function generateWishlist() {
   const name = state.user.name || 'Friend';
   document.getElementById('wishlist-owner-name').textContent = name.split(' ')[0];
   document.getElementById('wishlist-page-sub').textContent = 'These are the ways people can help ' + name.split(' ')[0] + ' right now.';
+
+  // ── EDIT MODE: if a wishlist already exists, just save any new tasks ───
+  if (window.currentWishlistId && window.currentShareToken) {
+    saveNewTasksToExistingWishlist();
+    renderWishlistPage();
+    goTo('wishlist-page');
+    return;
+  }
+
   const userData = {
     name: state.user.name,
     email: document.getElementById('f-email').value,
@@ -1292,6 +1304,36 @@ function markComplete(taskId) {
     }
   }
   window.renderWishlistPage();
+}
+
+function enterEditMode() {
+  // Go to wishlist builder with existing tasks already in state
+  // Clear visual chip selections first (builder will rebuild from state)
+  goTo('wishlist-builder');
+  document.getElementById('greeting-name').textContent = (state.user.name || 'friend').split(' ')[0];
+  // Re-select chips that match existing tasks
+  setTimeout(() => {
+    document.querySelectorAll('.task-chip').forEach(chip => {
+      const chipText = chip.textContent.replace(/^[+\u2713]\s*/, '').trim();
+      const alreadyAdded = state.selectedTasks.some(t => t.name === chipText);
+      if (alreadyAdded) {
+        chip.classList.add('selected');
+        const icon = chip.querySelector('.chip-icon');
+        if (icon) icon.textContent = '\u2713';
+      }
+    });
+    renderSidebar();
+  }, 50);
+}
+
+async function saveNewTasksToExistingWishlist() {
+  if (typeof window.addTasksToWishlist === 'function') {
+    // Only save tasks that don't have a Firestore-style long ID yet (newly added ones)
+    const newTasks = state.selectedTasks.filter(t => String(t.id).length < 15);
+    if (newTasks.length > 0) {
+      await window.addTasksToWishlist(window.currentWishlistId, newTasks);
+    }
+  }
 }
 
 function copyLink() {
@@ -1472,7 +1514,12 @@ window.addEventListener('load', async () => {
     const data = await window.loadWishlistByToken(token);
     if (data) {
       window.currentWishlistId = data.wishlist.id;
+      window.currentShareToken = token;
+      window.currentWishlistUrl = window.location.href;
       state.selectedTasks = data.tasks.map(t => ({ id: t.id, name: t.name, category: t.category, date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery, location: t.location, status: t.status, claimedBy: t.claimedBy, customScript: t.customScript || '' }));
+      state.user.name = data.wishlist.ownerName || '';
+      const editBtn = document.getElementById('edit-wishlist-btn');
+      if (editBtn) editBtn.style.display = 'inline-flex';
       const ownerName = data.wishlist.ownerName || 'Friend';
       document.getElementById('wishlist-owner-name').textContent = ownerName.split(' ')[0];
       document.getElementById('wishlist-page-sub').textContent = 'These are the ways people can help ' + ownerName.split(' ')[0] + ' right now.';
@@ -1558,6 +1605,28 @@ window.saveToFirebase = async function(userData, tasks) {
       const tSnap = await getDocs(query(collection(db, "tasks"), where("wishlistId", "==", wDoc.id)));
       return { wishlist: { id: wDoc.id, ...wDoc.data() }, tasks: tSnap.docs.map(d => ({ id: d.id, ...d.data() })) };
     } catch (e) { console.error('Load error:', e); return null; }
+  };
+
+  window.addTasksToWishlist = async function(wishlistId, newTasks) {
+    try {
+      for (const task of newTasks) {
+        await addDoc(collection(db, "tasks"), {
+          wishlistId,
+          name: task.name,
+          category: task.category,
+          date: task.date || '',
+          timeOfDay: task.timeOfDay || 'Flexible',
+          delivery: task.delivery || 'Any',
+          location: task.location || '',
+          customScript: task.customScript || '',
+          status: 'open',
+          claimedBy: null,
+          claimerEmail: null,
+          createdAt: serverTimestamp(),
+        });
+      }
+      return true;
+    } catch (e) { console.error('Add tasks error:', e); return false; }
   };
 
   window.claimTaskInFirebase = async function(taskId, supporterName, supporterEmail, status, extraData) {
