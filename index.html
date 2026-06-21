@@ -557,8 +557,8 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 
       <div class="form-step" id="step-4">
         <h2 class="form-title">Help your supporters show up right.</h2>
-        <p class="form-subtitle">Write this once &#8212; we will share it with every supporter who claims a task.</p>
-        <div class="data-note" style="border-color:var(--periwinkle);background:rgba(152,139,190,0.05);">Think of this as your supporter briefing. The more you share, the less explaining you will need to do later.</div>
+        <p class="form-subtitle">Almost done. This last bit is different from what you just shared.</p>
+        <div class="data-note" style="border-color:var(--periwinkle);background:rgba(152,139,190,0.05);"><strong>Why we're asking:</strong> Anyone who claims a task on your wishlist will see this information automatically &#8212; so you never have to repeat yourself. Think of it as a briefing for your supporters, written once. Everything here is optional.</div>
         <div class="field-group"><label class="field-label">Allergies or dietary needs <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-allergies" type="text" placeholder="e.g. Nut allergy, gluten-free, vegetarian"></div>
         <div class="field-group"><label class="field-label">Pets at home <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-pets" type="text" placeholder="e.g. Two friendly dogs. Cat hides. Side gate unlocked."></div>
         <div class="field-group"><label class="field-label">Home access <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-access" type="text" placeholder="e.g. Leave bags on porch, gate code 4421, side door"></div>
@@ -748,9 +748,9 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
   <div class="success-content">
     <div class="success-heart">&#9825;</div>
-    <h2 class="success-title">You&#39;re in.<br><em>Thank you.</em></h2>
+    <h2 class="success-title">You&#39;re in.</h2>
     <div class="success-rule"></div>
-    <p class="success-sub" id="success-message">A confirmation is on its way. We will send a gentle reminder the day before your task.</p>
+    <p class="success-sub" id="success-message">A confirmation is on its way. Add this to your calendar so you don't miss it.</p>
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:300px;margin:0 auto 16px;">
       <button class="cal-btn" onclick="addToGoogleCalendar()">&#128197; Add to Google Calendar</button>
       <button class="cal-btn apple" onclick="addToAppleCalendar()">&#127822; Add to Apple Calendar</button>
@@ -1376,7 +1376,7 @@ function confirmClaim() {
     }
   }
   closeModal();
-  document.getElementById('success-message').textContent = name + ', a confirmation is on its way. We will send a gentle reminder the day before. Showing up matters \u2014 thank you.';
+  document.getElementById('success-message').textContent = name + ', a confirmation is on its way. Add this to your calendar so you don\'t forget. Thank you for showing up.';
   goTo('success-screen');
 }
 
@@ -1596,6 +1596,7 @@ window.saveToFirebase = async function(userData, tasks) {
             taskDelivery: ed.taskDelivery || 'Any',
             taskLocation: ed.taskLocation || '',
             grieversNotes: ed.grieversNotes || '',
+            wishlistUrl: window.location.href,
           });
         }
       }
