@@ -1455,7 +1455,10 @@ function confirmClaim() {
     state.lastClaimedTask = task;
     console.log('Task ID:', task.id, 'length:', task.id.toString().length, 'has dot:', task.id.toString().indexOf('.') !== -1);
     if (typeof window.claimTaskInFirebase === 'function' && task.id.toString().indexOf('.') === -1 && task.id.toString().length >= 15) {
-      console.log('Claim firing — griever email from f-email:', document.getElementById('f-email') ? document.getElementById('f-email').value : 'NOT FOUND');
+      const grieversEmail = (document.getElementById('f-email') && document.getElementById('f-email').value)
+        ? document.getElementById('f-email').value
+        : (state.user.email || '');
+      console.log('Claim firing — griever email resolved:', grieversEmail);
       // Gather griever info from state
       const grieversNotes = [];
       if (state.user.allergies) grieversNotes.push('Allergies: ' + state.user.allergies);
@@ -1468,7 +1471,7 @@ function confirmClaim() {
         : (window.supporterScripts[task.name] || '');
 
       window.claimTaskInFirebase(task.id.toString(), name, email, 'claimed', {
-        grieversEmail: document.getElementById('f-email') ? document.getElementById('f-email').value : '',
+        grieversEmail: (document.getElementById('f-email') && document.getElementById('f-email').value) ? document.getElementById('f-email').value : (state.user.email || ''),
         grieversName: state.user.name || 'friend',
         taskName: task.name,
         taskGuidance: supporterScriptForTask.substring(0, 300),
@@ -1580,8 +1583,10 @@ window.addEventListener('load', async () => {
       window.isWishlistOwner = !!(sessionEmail && wishlistOwnerEmail && sessionEmail === wishlistOwnerEmail);
       // Also store owner name for supporter view
       state.user.name = data.wishlist.ownerName || '';
+      state.user.email = data.wishlist.ownerEmail || '';
       state.selectedTasks = data.tasks.map(t => ({ id: t.id, name: t.name, category: t.category, date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery, location: t.location, status: t.status, claimedBy: t.claimedBy, customScript: t.customScript || '' }));
       state.user.name = data.wishlist.ownerName || '';
+      state.user.email = data.wishlist.ownerEmail || '';
       // Mark as owner so griever-only elements show correctly
       window.isWishlistOwner = false; // supporter by default
       // Only mark as owner if this session generated this wishlist
@@ -1707,10 +1712,11 @@ window.saveToFirebase = async function(userData, tasks) {
         const ed = extraData || {};
 
         // Notify griever someone claimed their task
-        if (ed.grieversEmail) {
+        const resolvedGrieversEmail = ed.grieversEmail || grieversEmail;
+        if (resolvedGrieversEmail) {
           callLoops({
             event: 'task_claimed_griever',
-            grieversEmail: ed.grieversEmail,
+            grieversEmail: resolvedGrieversEmail,
             grieversName: ed.grieversName || 'friend',
             supporterName,
             taskName: ed.taskName || 'a task',
