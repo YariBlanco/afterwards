@@ -315,8 +315,8 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 
 /* ── WISHLIST PAGE ── */
 .wishlist-page-content { flex: 1; max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; width: 100%; }
-.supporter-banner { background: rgba(152,139,190,0.08); border-left: 3px solid var(--periwinkle); border-radius: 0 2px 2px 0; padding: 18px 22px; margin-bottom: 32px; }
-.supporter-banner p { font-size: 14px; font-weight: 300; font-style: italic; color: var(--mauve); line-height: 1.7; }
+
+
 .wishlist-page-title { font-family: 'NyghtSerif', serif; font-size: 42px; font-weight: 400; font-style: italic; color: var(--bark); margin-bottom: 6px; line-height: 1.1; }
 .wishlist-page-title em { background: linear-gradient(135deg, var(--peach), var(--coral)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .wishlist-page-sub { font-size: 13px; font-weight: 300; color: var(--text-mid); margin-bottom: 24px; }
@@ -706,7 +706,6 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 <div id="wishlist-page" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
   <div class="wishlist-page-content">
-    <div class="supporter-banner"></div>
     <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Your Afterwards Wishlist</em></h2>
     <p class="wishlist-page-sub" id="wishlist-page-sub">These are the ways people can help right now.</p>
 
@@ -1152,6 +1151,8 @@ function generateWishlist() {
           window.currentShareToken = result.shareToken;
           window.currentWishlistUrl = shareUrl;
           window.isWishlistOwner = true; // This session created this wishlist
+          // Remember ownership across sessions via localStorage
+          try { localStorage.setItem('afterwards_owner_token', result.shareToken); } catch(e) {}
           // Update the input field
           const el = document.getElementById('share-link-input');
           if (el) {
@@ -1525,7 +1526,10 @@ window.addEventListener('load', async () => {
       window.currentWishlistId = data.wishlist.id;
       window.currentShareToken = token;
       window.currentWishlistUrl = window.location.href;
-      window.isWishlistOwner = false; // Loaded via shared link — assume supporter
+      // Check if this person is the owner via localStorage
+      let storedOwnerToken = '';
+      try { storedOwnerToken = localStorage.getItem('afterwards_owner_token') || ''; } catch(e) {}
+      window.isWishlistOwner = (storedOwnerToken === token);
       state.selectedTasks = data.tasks.map(t => ({ id: t.id, name: t.name, category: t.category, date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery, location: t.location, status: t.status, claimedBy: t.claimedBy, customScript: t.customScript || '' }));
       state.user.name = data.wishlist.ownerName || '';
       // Mark as owner so griever-only elements show correctly
