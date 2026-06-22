@@ -706,10 +706,10 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 <div id="wishlist-page" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
   <div class="wishlist-page-content">
-    <div class="supporter-banner"><p>You are here because someone you care about is grieving. Here is how to help &#8212; choose a task, and show up with confidence.</p></div>
-    <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Friend</em>&#39;s Support Wishlist</h2>
+    <div class="supporter-banner"></div>
+    <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Your Afterwards Wishlist</em></h2>
     <p class="wishlist-page-sub" id="wishlist-page-sub">These are the ways people can help right now.</p>
-    <p class="wishlist-page-sub" id="wishlist-supporter-copy" style="display:none;">Choose a task below and show up for them.</p>
+
     <div class="share-bar" id="share-link-wrap">
       <input class="share-link" id="share-link-input" type="text" value="theafterwards.co" readonly>
       <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copy Link</button>
@@ -770,7 +770,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
   <div class="dashboard-content">
     <div class="dashboard-header">
       <p class="dashboard-eyebrow">Your Afterwards</p>
-      <h2 class="dashboard-title">Your support,<br><em>at a glance.</em></h2>
+      <h2 class="dashboard-title">Your support, <em>at a glance.</em></h2>
       <p class="dashboard-sub">Here is how your community is showing up for you.</p>
     </div>
     <div class="stats-row">
@@ -1200,11 +1200,11 @@ window.renderWishlistPage = function() {
 
   // Update copy based on view
   if (isOwner) {
-    if (pageTitle) pageTitle.textContent = 'Your Support Wishlist';
+    if (pageTitle) pageTitle.textContent = 'Your Afterwards Wishlist';
     if (pageSub) pageSub.textContent = 'These are the ways your community can support you right now.';
   } else {
-    if (pageTitle) pageTitle.textContent = ownerFirstName + '\'s Support Wishlist';
-    if (pageSub) pageSub.textContent = 'Choose a task below and show up for them.';
+    if (pageTitle) pageTitle.textContent = ownerFirstName + '\'s Afterwards Wishlist';
+    if (pageSub) pageSub.innerHTML = 'You are here because someone you care about is grieving.<br>Choose a task below and show up for them.';
   }
 
   const list = document.getElementById('task-cards-list');
