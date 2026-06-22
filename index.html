@@ -718,6 +718,15 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <button class="view-wishlist-btn" onclick="goTo('dashboard')">&#9825; View My Dashboard</button>
       <button class="view-wishlist-btn" id="edit-wishlist-btn" onclick="enterEditMode()" style="display:none; border-color:var(--periwinkle); color:var(--periwinkle);">+ Add More to My List</button>
     </div>
+    <div id="claim-ownership-wrap" style="display:none; margin-top:16px; text-align:center;">
+      <button onclick="showOwnershipPrompt()" style="background:none;border:none;font-size:12px;color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:ClashDisplay,sans-serif;">Is this your wishlist? Manage it here.</button>
+    </div>
+    <div id="ownership-prompt" style="display:none; margin-top:12px; max-width:340px; background:white; border:1px solid var(--border); border-radius:8px; padding:20px; text-align:left;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--bark);">Enter the email you used to create this wishlist.</p>
+      <input type="email" id="ownership-email" placeholder="your@email.com" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:4px;font-family:ClashDisplay,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box;">
+      <button onclick="verifyOwnership()" style="width:100%;padding:10px;background:var(--periwinkle);color:white;border:none;border-radius:4px;font-family:ClashDisplay,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">Verify &rarr;</button>
+      <p id="ownership-error" style="display:none;font-size:12px;color:#c0392b;margin-top:8px;">That email doesn&apos;t match. Try another email address, or reach out to us at <a href="mailto:yari@blancostudios.xyz" style="color:#c0392b;">yari@blancostudios.xyz</a> and we&apos;ll help you access your wishlist.</p>
+    </div>
   </div>
 </div>
 
@@ -1151,8 +1160,6 @@ function generateWishlist() {
           window.currentShareToken = result.shareToken;
           window.currentWishlistUrl = shareUrl;
           window.isWishlistOwner = true; // This session created this wishlist
-          // Remember ownership across sessions via localStorage
-          try { localStorage.setItem('afterwards_owner_token', result.shareToken); } catch(e) {}
           // Update the input field
           const el = document.getElementById('share-link-input');
           if (el) {
@@ -1198,6 +1205,10 @@ window.renderWishlistPage = function() {
   if (editBtn) editBtn.style.display = isOwner ? 'inline-flex' : 'none';
   if (shareLinkWrap) shareLinkWrap.style.display = isOwner ? '' : 'none';
   if (supporterCopy) supporterCopy.style.display = isOwner ? 'none' : '';
+  const claimOwnershipWrap = document.getElementById('claim-ownership-wrap');
+  const ownershipPrompt = document.getElementById('ownership-prompt');
+  if (claimOwnershipWrap) claimOwnershipWrap.style.display = isOwner ? 'none' : '';
+  if (ownershipPrompt) ownershipPrompt.style.display = 'none';
 
   // Update copy based on view
   if (isOwner) {
@@ -1319,6 +1330,41 @@ function markComplete(taskId) {
     }
   }
   window.renderWishlistPage();
+}
+
+function showOwnershipPrompt() {
+  const prompt = document.getElementById('ownership-prompt');
+  if (prompt) {
+    prompt.style.display = prompt.style.display === 'none' ? 'block' : 'none';
+    document.getElementById('ownership-error').style.display = 'none';
+    document.getElementById('ownership-email').value = '';
+  }
+}
+
+async function verifyOwnership() {
+  const inputEmail = (document.getElementById('ownership-email').value || '').trim().toLowerCase();
+  if (!inputEmail) return;
+
+  if (!window.currentWishlistId && !window.currentShareToken) return;
+
+  // Load wishlist from Firebase and check email
+  try {
+    const data = window.currentShareToken && typeof window.loadWishlistByToken === 'function'
+      ? await window.loadWishlistByToken(window.currentShareToken)
+      : null;
+
+    if (data && data.wishlist.ownerEmail && data.wishlist.ownerEmail.toLowerCase() === inputEmail) {
+      // Verified — unlock owner view
+      window.isWishlistOwner = true;
+      document.getElementById('ownership-prompt').style.display = 'none';
+      document.getElementById('claim-ownership-wrap').style.display = 'none';
+      window.renderWishlistPage();
+    } else {
+      document.getElementById('ownership-error').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('ownership-error').style.display = 'block';
+  }
 }
 
 function enterEditMode() {
@@ -1526,10 +1572,12 @@ window.addEventListener('load', async () => {
       window.currentWishlistId = data.wishlist.id;
       window.currentShareToken = token;
       window.currentWishlistUrl = window.location.href;
-      // Check if this person is the owner via localStorage
-      let storedOwnerToken = '';
-      try { storedOwnerToken = localStorage.getItem('afterwards_owner_token') || ''; } catch(e) {}
-      window.isWishlistOwner = (storedOwnerToken === token);
+      // Check if viewer is the owner by comparing ownerEmail to session email
+      const sessionEmail = document.getElementById('f-email') ? document.getElementById('f-email').value.trim().toLowerCase() : '';
+      const wishlistOwnerEmail = (data.wishlist.ownerEmail || '').toLowerCase();
+      window.isWishlistOwner = !!(sessionEmail && wishlistOwnerEmail && sessionEmail === wishlistOwnerEmail);
+      // Also store owner name for supporter view
+      state.user.name = data.wishlist.ownerName || '';
       state.selectedTasks = data.tasks.map(t => ({ id: t.id, name: t.name, category: t.category, date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery, location: t.location, status: t.status, claimedBy: t.claimedBy, customScript: t.customScript || '' }));
       state.user.name = data.wishlist.ownerName || '';
       // Mark as owner so griever-only elements show correctly
@@ -1590,7 +1638,7 @@ window.saveToFirebase = async function(userData, tasks) {
     try {
       const userRef = await addDoc(collection(db, "users"), { ...userData, createdAt: serverTimestamp() });
       const shareToken = generateToken();
-      const wishlistRef = await addDoc(collection(db, "wishlists"), { userId: userRef.id, shareToken, ownerName: userData.name, createdAt: serverTimestamp() });
+      const wishlistRef = await addDoc(collection(db, "wishlists"), { userId: userRef.id, shareToken, ownerName: userData.name, ownerEmail: userData.email, createdAt: serverTimestamp() });
       for (const task of tasks) {
         await addDoc(collection(db, "tasks"), { wishlistId: wishlistRef.id, name: task.name, category: task.category, date: task.date || '', timeOfDay: task.timeOfDay || 'Flexible', delivery: task.delivery || 'Any', location: task.location || '', customScript: task.customScript || '', status: 'open', claimedBy: null, claimerEmail: null, createdAt: serverTimestamp() });
       }
