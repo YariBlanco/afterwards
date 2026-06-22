@@ -1455,6 +1455,7 @@ function confirmClaim() {
     state.lastClaimedTask = task;
     console.log('Task ID:', task.id, 'length:', task.id.toString().length, 'has dot:', task.id.toString().indexOf('.') !== -1);
     if (typeof window.claimTaskInFirebase === 'function' && task.id.toString().indexOf('.') === -1 && task.id.toString().length >= 15) {
+      console.log('Claim firing — griever email from f-email:', document.getElementById('f-email') ? document.getElementById('f-email').value : 'NOT FOUND');
       // Gather griever info from state
       const grieversNotes = [];
       if (state.user.allergies) grieversNotes.push('Allergies: ' + state.user.allergies);
