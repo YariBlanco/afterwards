@@ -709,7 +709,8 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <div class="supporter-banner"><p>You are here because someone you care about is grieving. Here is how to help &#8212; choose a task, and show up with confidence.</p></div>
     <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Friend</em>&#39;s Support Wishlist</h2>
     <p class="wishlist-page-sub" id="wishlist-page-sub">These are the ways people can help right now.</p>
-    <div class="share-bar">
+    <p class="wishlist-page-sub" id="wishlist-supporter-copy" style="display:none;">Choose a task below and show up for them.</p>
+    <div class="share-bar" id="share-link-wrap">
       <input class="share-link" id="share-link-input" type="text" value="theafterwards.co" readonly>
       <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copy Link</button>
     </div>
@@ -910,6 +911,21 @@ function goTo(id) {
   if (id === 'wishlist-page' && window.currentWishlistUrl) {
     const shareEl = document.getElementById('share-link-input');
     if (shareEl) shareEl.value = window.currentWishlistUrl;
+  }
+  // Reload tasks from Firebase when returning to wishlist page
+  if (id === 'wishlist-page' && window.currentShareToken && typeof window.loadWishlistByToken === 'function') {
+    window.loadWishlistByToken(window.currentShareToken).then(data => {
+      if (data) {
+        state.selectedTasks = data.tasks.map(t => ({
+          id: t.id, name: t.name, category: t.category,
+          date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery,
+          location: t.location, status: t.status,
+          claimedBy: t.claimedBy, claimerEmail: t.claimerEmail || '',
+          customScript: t.customScript || ''
+        }));
+        window.renderWishlistPage();
+      }
+    });
   }
 }
 window.goTo = goTo;
@@ -1131,6 +1147,7 @@ function generateWishlist() {
           // Store token globally so it persists
           window.currentShareToken = result.shareToken;
           window.currentWishlistUrl = shareUrl;
+          window.isWishlistOwner = true; // This session created this wishlist
           // Update the input field
           const el = document.getElementById('share-link-input');
           if (el) {
@@ -1161,6 +1178,21 @@ function generateWishlist() {
 }
 
 window.renderWishlistPage = function() {
+  const isOwner = window.isWishlistOwner || false;
+
+  // ── Show/hide owner-only elements ──────────────────────────────────────
+  const dashBtn = document.querySelector('.view-wishlist-btn');
+  const editBtn = document.getElementById('edit-wishlist-btn');
+  const shareLinkWrap = document.getElementById('share-link-wrap');
+  const ownerCopy = document.getElementById('wishlist-owner-copy');
+  const supporterCopy = document.getElementById('wishlist-supporter-copy');
+
+  if (dashBtn) dashBtn.style.display = isOwner ? '' : 'none';
+  if (editBtn) editBtn.style.display = isOwner ? 'inline-flex' : 'none';
+  if (shareLinkWrap) shareLinkWrap.style.display = isOwner ? '' : 'none';
+  if (ownerCopy) ownerCopy.style.display = isOwner ? '' : 'none';
+  if (supporterCopy) supporterCopy.style.display = isOwner ? 'none' : '';
+
   const list = document.getElementById('task-cards-list');
   list.innerHTML = state.selectedTasks.map((t, idx) => {
     const defaultScript = supporterScripts[t.name] || 'Show up with kindness. Your presence matters more than perfection.';
@@ -1479,10 +1511,14 @@ window.addEventListener('load', async () => {
       window.currentWishlistId = data.wishlist.id;
       window.currentShareToken = token;
       window.currentWishlistUrl = window.location.href;
+      window.isWishlistOwner = false; // Loaded via shared link — assume supporter
       state.selectedTasks = data.tasks.map(t => ({ id: t.id, name: t.name, category: t.category, date: t.date, timeOfDay: t.timeOfDay, delivery: t.delivery, location: t.location, status: t.status, claimedBy: t.claimedBy, customScript: t.customScript || '' }));
       state.user.name = data.wishlist.ownerName || '';
+      // Mark as owner so griever-only elements show correctly
+      window.isWishlistOwner = false; // supporter by default
+      // Only mark as owner if this session generated this wishlist
       const editBtn = document.getElementById('edit-wishlist-btn');
-      if (editBtn) editBtn.style.display = 'inline-flex';
+      if (editBtn) editBtn.style.display = 'none';
       const ownerName = data.wishlist.ownerName || 'Friend';
       document.getElementById('wishlist-owner-name').textContent = ownerName.split(' ')[0];
       document.getElementById('wishlist-page-sub').textContent = 'These are the ways people can help ' + ownerName.split(' ')[0] + ' right now.';
