@@ -1453,12 +1453,12 @@ function confirmClaim() {
     task.claimedBy = name;
     task.claimerEmail = email;
     state.lastClaimedTask = task;
-    console.log('Task ID:', task.id, 'length:', task.id.toString().length, 'has dot:', task.id.toString().indexOf('.') !== -1);
+
     if (typeof window.claimTaskInFirebase === 'function' && task.id.toString().indexOf('.') === -1 && task.id.toString().length >= 15) {
       const grieversEmail = (document.getElementById('f-email') && document.getElementById('f-email').value)
         ? document.getElementById('f-email').value
         : (state.user.email || '');
-      console.log('Claim firing — griever email resolved:', grieversEmail);
+
       // Gather griever info from state
       const grieversNotes = [];
       if (state.user.allergies) grieversNotes.push('Allergies: ' + state.user.allergies);
