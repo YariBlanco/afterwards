@@ -1111,11 +1111,15 @@ function generateWishlist() {
 
   // ── EDIT MODE: if a wishlist already exists, just save any new tasks ───
   if (window.currentWishlistId && window.currentShareToken) {
+    window.isWishlistOwner = true;
     saveNewTasksToExistingWishlist();
     renderWishlistPage();
     goTo('wishlist-page');
     return;
   }
+
+  // New wishlist — mark as owner immediately before async save
+  window.isWishlistOwner = true;
 
   const userData = {
     name: state.user.name,
@@ -1179,19 +1183,29 @@ function generateWishlist() {
 
 window.renderWishlistPage = function() {
   const isOwner = window.isWishlistOwner || false;
+  const ownerFirstName = (state.user.name || 'friend').split(' ')[0];
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
   const dashBtn = document.querySelector('.view-wishlist-btn');
   const editBtn = document.getElementById('edit-wishlist-btn');
   const shareLinkWrap = document.getElementById('share-link-wrap');
-  const ownerCopy = document.getElementById('wishlist-owner-copy');
   const supporterCopy = document.getElementById('wishlist-supporter-copy');
+  const pageSub = document.getElementById('wishlist-page-sub');
+  const pageTitle = document.getElementById('wishlist-owner-name');
 
   if (dashBtn) dashBtn.style.display = isOwner ? '' : 'none';
   if (editBtn) editBtn.style.display = isOwner ? 'inline-flex' : 'none';
   if (shareLinkWrap) shareLinkWrap.style.display = isOwner ? '' : 'none';
-  if (ownerCopy) ownerCopy.style.display = isOwner ? '' : 'none';
   if (supporterCopy) supporterCopy.style.display = isOwner ? 'none' : '';
+
+  // Update copy based on view
+  if (isOwner) {
+    if (pageTitle) pageTitle.textContent = 'Your Support Wishlist';
+    if (pageSub) pageSub.textContent = 'These are the ways your community can support you right now.';
+  } else {
+    if (pageTitle) pageTitle.textContent = ownerFirstName + '\'s Support Wishlist';
+    if (pageSub) pageSub.textContent = 'Choose a task below and show up for them.';
+  }
 
   const list = document.getElementById('task-cards-list');
   list.innerHTML = state.selectedTasks.map((t, idx) => {
