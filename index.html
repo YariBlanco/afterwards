@@ -197,8 +197,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 .btn-back:hover { color: var(--bark); }
 
 /* ── INNER PAGE BACKGROUNDS ── */
-#onboarding, #wishlist-builder, #wishlist-page, #success-screen,
-#feedback-supporter, #feedback-griever, #dashboard,
+#onboarding, #wishlist-builder, #wishlist-page, #success-screen, #dashboard,
 #privacy-policy, #terms-of-service {
   background: linear-gradient(160deg, #fdf8f4 0%, #f0e8e4 100%);
 }
@@ -758,42 +757,11 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <button class="cal-btn" onclick="addToGoogleCalendar()">&#128197; Add to Google Calendar</button>
       <button class="cal-btn apple" onclick="addToAppleCalendar()">&#127822; Add to Apple Calendar</button>
     </div>
-    <button class="btn-primary" onclick="goTo('feedback-supporter')" style="margin-top:8px;">Continue &rarr;</button>
+    <button class="btn-secondary" onclick="goTo('wishlist-page')" style="margin-top:8px;">Back to Wishlist</button>
   </div>
 </div>
 
-<!-- ==================== FEEDBACK: SUPPORTER ==================== -->
-<div id="feedback-supporter" class="screen">
-  <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
-  <div class="feedback-content">
-    <p class="feedback-eyebrow">One moment</p>
-    <h2 class="feedback-title">How does it feel<br><em>to show up?</em></h2>
-    <p class="feedback-sub">You do not have to explain. We are learning what makes it easier for people to be there for each other &#8212; and your honest answer helps.</p>
-    <div class="feedback-options">
-      <button class="feedback-btn" onclick="selectFeedback(this,'supporter','meaningful')">Meaningful</button>
-      <button class="feedback-btn" onclick="selectFeedback(this,'supporter','uncertain')">A little uncertain</button>
-      <button class="feedback-btn" onclick="selectFeedback(this,'supporter','nervous')">Nervous but here</button>
-      <button class="feedback-btn" onclick="selectFeedback(this,'supporter','unsure')">Not sure yet</button>
-    </div>
-    <button class="btn-skip" onclick="goTo('wishlist-page')">Skip for now</button>
-  </div>
-</div>
 
-<!-- ==================== FEEDBACK: GRIEVER ==================== -->
-<div id="feedback-griever" class="screen">
-  <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
-  <div class="feedback-content">
-    <p class="feedback-eyebrow">One quick question</p>
-    <h2 class="feedback-title">Was this support<br><em>helpful?</em></h2>
-    <p class="feedback-sub">No explanation needed. Just let us know &#8212; your answer helps us build something better for everyone who comes after you.</p>
-    <div class="feedback-options">
-      <button class="feedback-btn" onclick="selectFeedback(this,'griever','yes')">Yes, it helped</button>
-      <button class="feedback-btn" onclick="selectFeedback(this,'griever','somewhat')">Somewhat</button>
-      <button class="feedback-btn" onclick="selectFeedback(this,'griever','no')">Not really</button>
-    </div>
-    <button class="btn-skip" onclick="goTo('dashboard')">Skip for now</button>
-  </div>
-</div>
 
 <!-- ==================== DASHBOARD ==================== -->
 <div id="dashboard" class="screen">
@@ -1477,12 +1445,7 @@ window.addClaimedTaskToCalendar = function(taskId) {
   downloadICS(generateICS((task.claimedBy || 'Someone') + ' is helping: ' + task.name, (task.claimedBy || 'Someone') + ' claimed this task for you.', task.date, task.timeOfDay, task.location || ''), 'afterwards-support.ics');
 };
 
-function selectFeedback(btn, type, val) {
-  btn.closest('.feedback-options').querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  if (typeof window.saveFeedback === 'function') window.saveFeedback(type, val);
-  setTimeout(() => goTo(type === 'supporter' ? 'wishlist-page' : 'dashboard'), 700);
-}
+
 
 function renderDashboard() {
   const tasks = state.selectedTasks;
