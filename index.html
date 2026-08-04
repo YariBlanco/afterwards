@@ -137,10 +137,46 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 }
 .btn-landing-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.7); transform: translateY(-1px); }
 
+.footer-social {
+  color: rgba(0,0,0,0.85);
+  font-size: 11px;
+  font-family: 'ClashDisplay', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-social:hover { color: #000; }
+
+.landing-footer {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 1.1s;
+}
+.footer-link {
+  background: none;
+  border: none;
+  color: rgba(0,0,0,0.85);
+  font-family: 'ClashDisplay', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+  transition: color 0.2s;
+}
+.footer-link:hover { color: #000; }
+
 .landing-tagline {
   position: absolute; bottom: 36px;
-  font-family: 'NyghtSerif', serif; font-style: italic; font-size: 16px;
-  color: rgba(255,255,255,0.3); letter-spacing: 0.04em;
+  font-family: 'NyghtSerif', serif; font-style: italic; font-size: 22px;
+  color: rgba(255,255,255,0.65); letter-spacing: 0.04em;
   opacity: 0; animation: fadeUp 1s ease forwards 1s;
 }
 
@@ -198,8 +234,10 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 
 /* ── INNER PAGE BACKGROUNDS ── */
 #onboarding, #wishlist-builder, #wishlist-page, #success-screen, #dashboard,
-#privacy-policy, #terms-of-service {
+#privacy-policy, #terms-of-service, #our-story {
   background: linear-gradient(160deg, #fdf8f4 0%, #f0e8e4 100%);
+  overflow-y: auto;
+  height: 100vh;
 }
 
 /* ── ONBOARDING ── */
@@ -418,7 +456,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 .status-done { background: rgba(255,154,137,0.12); color: var(--coral); }
 
 /* ── LEGAL ── */
-.legal-content { flex: 1; max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; width: 100%; }
+.legal-content { flex: 1; max-width: 680px; margin: 0 auto; padding: 40px 24px 160px; width: 100%; }
 .legal-title { font-family: 'NyghtSerif', serif; font-style: italic; font-size: 42px; font-weight: 400; color: var(--bark); margin-bottom: 8px; }
 .legal-date { font-size: 12px; font-weight: 300; color: var(--text-soft); margin-bottom: 40px; }
 .legal-content h2 { font-family: 'ClashDisplay', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--periwinkle); margin: 32px 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
@@ -429,9 +467,9 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 
 /* ── LEGAL FOOTER ── */
 .legal-footer { display: flex; gap: 20px; justify-content: center; align-items: center; padding: 18px 24px; border-top: 1px solid var(--border); font-size: 11px; font-weight: 300; color: var(--text-soft); flex-wrap: wrap; }
-.legal-footer-landing { border-top: 1px solid rgba(255,255,255,0.15); }
-.legal-footer-landing span, .legal-footer-landing button { color: rgba(255,255,255,0.4); }
-.legal-footer button { background: none; border: none; color: var(--periwinkle); font-family: 'ClashDisplay', sans-serif; font-size: 11px; font-weight: 300; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.legal-footer-landing { background: rgba(255,255,255,0.92); border-top: none; backdrop-filter: blur(4px); }
+.legal-footer-landing span, .legal-footer-landing button, .legal-footer-landing a { color: #8a7eaa; font-weight: 500; }
+.legal-footer button { background: none; border: none; color: #000; font-family: 'ClashDisplay', sans-serif; font-size: 11px; font-weight: 300; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -484,15 +522,18 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <div class="landing-rule"></div>
     <p class="landing-sub">When loss feels overwhelming, let your community show up for you.<br>Create a simple wishlist of support, and let care find its way to your door.</p>
     <div class="landing-ctas">
-      <button class="btn-landing-primary" onclick="goTo('onboarding')">Create Your Support List &rarr;</button>
+      <button class="btn-landing-primary" onclick="goTo('onboarding')">Build Your Support Registry &rarr;</button>
       <button class="btn-landing-secondary" onclick="goToSupporterView()">Help Someone Grieving</button>
     </div>
     <p class="landing-tagline">Care is the point.</p>
   </div>
   <div class="legal-footer legal-footer-landing">
     <span>&copy; 2026 Afterwards &middot; Yari Blanco</span>
+    <button onclick="goTo('our-story')">Our Story</button>
     <button onclick="goTo('privacy-policy')">Privacy Policy</button>
     <button onclick="goTo('terms-of-service')">Terms of Service</button>
+    <a href="https://www.instagram.com/theafterwards.co/" target="_blank" class="footer-social">Instagram</a>
+    <a href="https://www.threads.com/@theafterwards.co" target="_blank" class="footer-social">Threads</a>
   </div>
 </div>
 
@@ -547,22 +588,22 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <div class="form-step" id="step-3">
         <h2 class="form-title">One last thing. <span class="optional-badge">Optional</span></h2>
         <p class="form-subtitle">Share only what feels comfortable.</p>
-        <div class="data-note"><strong>Why we are asking:</strong> These questions help us understand who Afterwards is serving so we can build better for everyone. Your answers will not appear on your wishlist.</div>
+        <div class="data-note"><strong>Why we are asking:</strong> These questions help us understand who Afterwards is serving so we can build better for everyone. Your answers will not appear on your registry.</div>
         <div class="field-group"><label class="field-label">Age</label><input class="field-input" id="f-age" type="text" placeholder="e.g. 34"></div>
         <div class="field-group"><label class="field-label">Race / Ethnicity</label><input class="field-input" id="f-race" type="text" placeholder="e.g. Black / African American, Latina, Asian, etc."></div>
-        <div class="onboarding-fwd">Almost there &#8212; one more step before your wishlist.</div>
+        <div class="onboarding-fwd">Almost there &#8212; one more step before your registry.</div>
         <div class="form-nav"><button class="btn-back" onclick="nextStep(2)">&#8592; Back</button><button class="btn-continue" onclick="nextStep(4)">Continue &rarr;</button></div>
       </div>
 
       <div class="form-step" id="step-4">
         <h2 class="form-title">Help your supporters show up right.</h2>
         <p class="form-subtitle">Almost done. This last bit is different from what you just shared.</p>
-        <div class="data-note" style="border-color:var(--periwinkle);background:rgba(152,139,190,0.05);"><strong>Why we're asking:</strong> Anyone who claims a task on your wishlist will see this information automatically &#8212; so you never have to repeat yourself. Think of it as a briefing for your supporters, written once. Everything here is optional.</div>
+        <div class="data-note" style="border-color:var(--periwinkle);background:rgba(152,139,190,0.05);"><strong>Why we're asking:</strong> Anyone who claims a task on your registry will see this information automatically &#8212; so you never have to repeat yourself. Think of it as a briefing for your supporters, written once. Everything here is optional.</div>
         <div class="field-group"><label class="field-label">Allergies or dietary needs <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-allergies" type="text" placeholder="e.g. Nut allergy, gluten-free, vegetarian"></div>
         <div class="field-group"><label class="field-label">Pets at home <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-pets" type="text" placeholder="e.g. Two friendly dogs. Cat hides. Side gate unlocked."></div>
         <div class="field-group"><label class="field-label">Home access <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-access" type="text" placeholder="e.g. Leave bags on porch, gate code 4421, side door"></div>
         <div class="field-group"><label class="field-label">Anything else supporters should know <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><textarea class="field-textarea" id="f-notes" placeholder="e.g. Kids are home after 3pm. No need to linger unless I invite you in."></textarea></div>
-        <div class="form-nav"><button class="btn-back" onclick="nextStep(3)">&#8592; Back</button><button class="btn-continue" onclick="completeOnboarding()">Create My Wishlist &rarr;</button></div>
+        <div class="form-nav"><button class="btn-back" onclick="nextStep(3)">&#8592; Back</button><button class="btn-continue" onclick="completeOnboarding()">Create My Registry &rarr;</button></div>
       </div>
     </div>
   </div>
@@ -697,7 +738,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <h3 class="sidebar-title">Your Support List</h3>
       <p class="sidebar-count" id="sidebar-count">0 items selected</p>
       <div class="selected-tasks" id="selected-tasks"><p class="sidebar-empty">"Letting your community help you is an act of love."</p></div>
-      <button class="btn-generate" id="generate-btn" onclick="generateWishlist()" disabled>Generate My Wishlist &rarr;</button>
+      <button class="btn-generate" id="generate-btn" onclick="generateRegistry()" disabled>Generate My Registry &rarr;</button>
     </div>
   </div>
 </div>
@@ -706,7 +747,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 <div id="wishlist-page" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
   <div class="wishlist-page-content">
-    <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Your Afterwards Wishlist</em></h2>
+    <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Your Afterwards Registry</em></h2>
     <p class="wishlist-page-sub" id="wishlist-page-sub">These are the ways people can help right now.</p>
 
     <div class="share-bar" id="share-link-wrap">
@@ -716,16 +757,16 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <div class="task-cards" id="task-cards-list"></div>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
       <button class="view-wishlist-btn" onclick="goTo('dashboard')">&#9825; View My Dashboard</button>
-      <button class="view-wishlist-btn" id="edit-wishlist-btn" onclick="enterEditMode()" style="display:none; border-color:var(--periwinkle); color:var(--periwinkle);">+ Add More to My List</button>
+      <button class="view-wishlist-btn" id="edit-wishlist-btn" onclick="enterEditMode()" style="display:none; border-color:var(--periwinkle); color:var(--periwinkle);">+ Add More to My Registry</button>
     </div>
     <div id="claim-ownership-wrap" style="display:none; margin-top:16px; text-align:center;">
-      <button onclick="showOwnershipPrompt()" style="background:none;border:none;font-size:12px;color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:ClashDisplay,sans-serif;">Is this your wishlist? Manage it here.</button>
+      <button onclick="showOwnershipPrompt()" style="background:none;border:none;font-size:12px;color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:ClashDisplay,sans-serif;">Is this your registry? Manage it here.</button>
     </div>
     <div id="ownership-prompt" style="display:none; margin-top:12px; max-width:340px; background:white; border:1px solid var(--border); border-radius:8px; padding:20px; text-align:left;">
-      <p style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--bark);">Enter the email you used to create this wishlist.</p>
+      <p style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--bark);">Enter the email you used to create this registry.</p>
       <input type="email" id="ownership-email" placeholder="your@email.com" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:4px;font-family:ClashDisplay,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box;">
       <button onclick="verifyOwnership()" style="width:100%;padding:10px;background:var(--periwinkle);color:white;border:none;border-radius:4px;font-family:ClashDisplay,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">Verify &rarr;</button>
-      <p id="ownership-error" style="display:none;font-size:12px;color:#c0392b;margin-top:8px;">That email doesn&apos;t match. Try another email address, or reach out to us at <a href="mailto:yari@blancostudios.xyz" style="color:#c0392b;">yari@blancostudios.xyz</a> and we&apos;ll help you access your wishlist.</p>
+      <p id="ownership-error" style="display:none;font-size:12px;color:#c0392b;margin-top:8px;">That email doesn&apos;t match. Try another email address, or reach out to us at <a href="mailto:yari@blancostudios.xyz" style="color:#c0392b;">yari@blancostudios.xyz</a> and we&apos;ll help you access your registry.</p>
     </div>
   </div>
 </div>
@@ -766,11 +807,97 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <button class="cal-btn" onclick="addToGoogleCalendar()">&#128197; Add to Google Calendar</button>
       <button class="cal-btn apple" onclick="addToAppleCalendar()">&#127822; Add to Apple Calendar</button>
     </div>
-    <button class="btn-secondary" onclick="goTo('wishlist-page')" style="margin-top:8px;">Back to Wishlist</button>
+    <button class="btn-secondary" onclick="goTo('wishlist-page')" style="margin-top:8px;">Back to Registry</button>
   </div>
 </div>
 
 
+
+
+<!-- ==================== OUR STORY ==================== -->
+<div id="our-story" class="screen">
+  <nav class="nav">
+    <span class="nav-wordmark">Afterwards</span>
+  </nav>
+
+  <div class="legal-content" style="max-width:680px;margin:0 auto;padding:48px 24px 80px;">
+
+    <h1 style="font-family:'NyghtSerif',serif;font-style:italic;font-weight:400;font-size:clamp(36px,6vw,56px);line-height:1.1;margin-bottom:32px;color:var(--bark);">Our Story</h1>
+
+    <p style="font-size:17px;font-weight:400;line-height:1.85;color:var(--bark);margin-bottom:24px;">Loss is inevitable. Being alone in it doesn&#8217;t have to be.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Grief is one of the most complex human experiences &#8212; emotionally, practically, and logistically. It arrives without warning and without instructions. And it doesn&#8217;t arrive alone. It brings with it a room full of people who love you and have no idea how to help.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Some disappear. Not because they don&#8217;t care, but because deep pain is uncomfortable to sit with. Others push you to move through it faster than feels possible. Not out of cruelty, but because watching someone they love suffer makes them feel helpless.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">The result is a particular kind of loneliness: being surrounded by people who love you and still feeling completely alone in it.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:40px;">Meanwhile, the practical weight of loss doesn&#8217;t pause for any of it. Today, people in their 30s, 40s, and 50s are facing the reality of aging parents and first significant losses. Navigating grief while managing careers, families, and lives that don&#8217;t stop. By 2030, more Americans will be past retirement age than under 18. The wave is already here. And the infrastructure to support the people moving through it is nowhere near ready.</p>
+
+    <p style="font-size:16px;font-style:italic;font-weight:400;line-height:1.6;color:var(--periwinkle);margin-bottom:40px;">Afterwards was built for this moment &#8212; and every one that follows.</p>
+
+    <h2 style="font-family:'NyghtSerif',serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:20px;color:var(--bark);">What we believe</h2>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Loss is something we were never meant to carry alone. And yet, most of the tools that exist for grief, if they exist at all, treat it like it&#8217;s only a logistics problem or a clinical condition. They were built for efficiency, not for people.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:40px;">Afterwards lives somewhere different. In the human layer. The in-between space where grief and warmth exist at the same time, where it hurts and there is still love, still community, still the possibility of being held.</p>
+
+    <h2 style="font-family:'NyghtSerif',serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:24px;color:var(--bark);">Our values</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;">
+      <div style="background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;">
+        <p style="font-family:'ClashDisplay',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--periwinkle);margin-bottom:8px;">Grace</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.65;color:var(--text-mid);">We meet people where they are, not where we wish they were.</p>
+      </div>
+      <div style="background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;">
+        <p style="font-family:'ClashDisplay',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--periwinkle);margin-bottom:8px;">Kinship</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.65;color:var(--text-mid);">Support is an act of love. The people already around you are ready to give it.</p>
+      </div>
+      <div style="background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;">
+        <p style="font-family:'ClashDisplay',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--periwinkle);margin-bottom:8px;">Duality</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.65;color:var(--text-mid);">We honor that grief and warmth can co-exist at the same time.</p>
+      </div>
+      <div style="background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;">
+        <p style="font-family:'ClashDisplay',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--periwinkle);margin-bottom:8px;">Witness</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.65;color:var(--text-mid);">We don&#8217;t sanitize grief. We sit in it with you, without trying to fix it.</p>
+      </div>
+      <div style="background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;grid-column:1/-1;">
+        <p style="font-family:'ClashDisplay',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--periwinkle);margin-bottom:8px;">Sovereignty</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.65;color:var(--text-mid);">You decide what you need. We make it possible to receive it.</p>
+      </div>
+    </div>
+
+    <h2 style="font-family:'NyghtSerif',serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:20px;color:var(--bark);">What we&#8217;re building</h2>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Afterwards is a grief support company built to meet people wherever they are in their journey. From the first days after a loss to the years that follow. We&#8217;re building an ecosystem of community, care, tools, and resources that grows with you: a home for everything that comes after loss.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Our first offering is a support registry. Grieving people can build one &#8212; listing the specific, real, doable things that would actually help. Laundry, pickups, phone calls, paperwork, presence. And then via a private link their community can claim what they&#8217;re able to give, with guidance on how to show up with care, not just good intentions.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:40px;">And for the moments when someone doesn&#8217;t have the capacity to build their own registry, a friend, a family member, anyone who loves them can create one on their behalf. Because sometimes the most profound act of care is stepping in before you&#8217;re invited.</p>
+
+    <h2 style="font-family:'NyghtSerif',serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:20px;color:var(--bark);">Where we come from</h2>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">Afterwards was founded by Yari Blanco, a community builder and marketing executive with two decades of experience in technology and media.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">The idea came not from a business plan, but from a moment of sitting with existential truth. On sabbatical from corporate life, she found herself working through the bigger questions &#8212; the ones most of us avoid. As an only child, her thoughts moved inevitably toward her mother, toward aging, toward death. And once she was there, she couldn&#8217;t look away from what she saw: when loss comes, people are left to figure it out in a landscape that is fragmented, highly localized, and almost entirely built around logistics rather than the human experience of grief.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:20px;">She assumed something better existed. She looked. It didn&#8217;t. So she spent two years talking to people, asking what they actually needed, what they wished someone had done, what they couldn&#8217;t bring themselves to say out loud. Those conversations became the foundation of Afterwards. She built it because she believes, with everything she has, that nobody should have to navigate this alone.</p>
+
+    <p style="font-size:15px;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:40px;">Grief is one of the most universal human experiences. Afterwards is here for every part of what comes after.</p>
+
+    <p style="font-size:16px;font-style:italic;font-weight:400;line-height:1.6;color:var(--periwinkle);">That&#8217;s the truth Afterwards was built on and the problem we will spend as long as it takes to solve. Not just for the first days after a loss, but for every day that follows. Wherever you are in your journey, this is a place for you.</p>
+
+  </div>
+  <div class="legal-footer legal-footer-landing" style="margin-top:auto;">
+    <span>&copy; 2026 Afterwards &middot; Yari Blanco</span>
+    <button onclick="goTo('landing')">Back to Afterwards</button>
+    <button onclick="goTo('our-story')">Our Story</button>
+    <button onclick="goTo('privacy-policy')">Privacy Policy</button>
+    <button onclick="goTo('terms-of-service')">Terms of Service</button>
+    <a href="https://www.instagram.com/theafterwards.co/" target="_blank" class="footer-social">Instagram</a>
+    <a href="https://www.threads.com/@theafterwards.co" target="_blank" class="footer-social">Threads</a>
+  </div>
+</div>
 
 <!-- ==================== DASHBOARD ==================== -->
 <div id="dashboard" class="screen">
@@ -788,7 +915,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     </div>
     <div class="dashboard-section-title">All Tasks</div>
     <div id="dashboard-tasks"></div>
-    <button class="view-wishlist-btn" style="margin-top:20px;" onclick="goTo('wishlist-page')">&#9825; View &amp; Share Your Wishlist</button>
+    <button class="view-wishlist-btn" style="margin-top:20px;" onclick="goTo('wishlist-page')">&#9825; View &amp; Share Your Registry</button>
   </div>
   <div class="legal-footer"><button onclick="goTo('privacy-policy')">Privacy Policy</button><button onclick="goTo('terms-of-service')">Terms of Service</button></div>
 </div>
@@ -796,6 +923,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 <!-- ==================== PRIVACY POLICY ==================== -->
 <div id="privacy-policy" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
+
   <div class="legal-content">
     <h1 class="legal-title">Privacy Policy</h1>
     <p class="legal-date">Last updated: June 3, 2026</p>
@@ -813,17 +941,17 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     </ul>
     <h2>How We Use Your Information</h2>
     <ul>
-      <li>To create and manage your support wishlist</li>
+      <li>To create and manage your support registry</li>
       <li>To facilitate connections between grievers and supporters</li>
       <li>To send transactional emails (task notifications, reminders, confirmations)</li>
       <li>To improve the platform and understand who we are serving</li>
       <li>We never sell your data or share it with advertisers</li>
       <li>We may use aggregated, anonymized insights to understand and grow our platform</li>
     </ul>
-    <h2>Wishlist Privacy</h2>
-    <p>Your support wishlist is private by default. It is only accessible to people you share your unique wishlist link with. Your wishlist is not searchable, indexed, or publicly visible.</p>
+    <h2>Registry Privacy</h2>
+    <p>Your support registry is private by default. It is only accessible to people you share your unique wishlist link with. Your registry is not searchable, indexed, or publicly visible.</p>
     <h2>Sensitive Information</h2>
-    <p>We understand that grief-related information is deeply personal. Optional demographic data is used only in aggregate to understand and improve our platform. This information does not appear on your wishlist and is not shared with supporters.</p>
+    <p>We understand that grief-related information is deeply personal. Optional demographic data is used only in aggregate to understand and improve our platform. This information does not appear on your registry and is not shared with supporters.</p>
     <h2>Data Storage</h2>
     <p>Your data is stored securely using Google Firebase, which employs industry-standard encryption. We retain your data for as long as your account is active. You may request deletion at any time by contacting us.</p>
     <h2>Email Communications</h2>
@@ -841,23 +969,33 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <p>This policy is governed by the laws of the State of New York.</p>
     <br><button class="btn-back" onclick="goTo('landing')">&#8592; Back</button>
   </div>
+  <div class="legal-footer legal-footer-landing" style="margin-top:auto;">
+    <span>&copy; 2026 Afterwards &middot; Yari Blanco</span>
+    <button onclick="goTo('landing')">Back to Afterwards</button>
+    <button onclick="goTo('our-story')">Our Story</button>
+    <button onclick="goTo('privacy-policy')">Privacy Policy</button>
+    <button onclick="goTo('terms-of-service')">Terms of Service</button>
+    <a href="https://www.instagram.com/theafterwards.co/" target="_blank" class="footer-social">Instagram</a>
+    <a href="https://www.threads.com/@theafterwards.co" target="_blank" class="footer-social">Threads</a>
+  </div>
 </div>
 
 <!-- ==================== TERMS OF SERVICE ==================== -->
 <div id="terms-of-service" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
+
   <div class="legal-content">
     <h1 class="legal-title">Terms of Service</h1>
     <p class="legal-date">Last updated: June 3, 2026</p>
     <p>Welcome to Afterwards. By using this platform, you agree to the following terms.</p>
     <h2>About Afterwards</h2>
-    <p>Afterwards is a grief support platform operated by Yari Blanco (sole proprietor) that helps people navigating loss create personalized support wishlists. Afterwards is not a medical service, mental health provider, or crisis intervention service.</p>
+    <p>Afterwards is a grief support platform operated by Yari Blanco (sole proprietor) that helps people navigating loss create personalized support registries. Afterwards is not a medical service, mental health provider, or crisis intervention service.</p>
     <h2>Eligibility</h2>
     <p>You must be 18 years of age or older to use Afterwards.</p>
     <h2>Your Account</h2>
     <ul>
       <li>You are responsible for the accuracy of information you provide</li>
-      <li>You are responsible for maintaining the security of your wishlist link</li>
+      <li>You are responsible for maintaining the security of your registry link</li>
       <li>You agree to use the platform only for its intended purpose</li>
     </ul>
     <h2>Acceptable Use</h2>
@@ -877,6 +1015,16 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <h2>Contact</h2>
     <p>Questions: <a href="mailto:yari@blancostudios.xyz" style="color:var(--periwinkle);">yari@blancostudios.xyz</a></p>
     <br><button class="btn-back" onclick="goTo('landing')">&#8592; Back</button>
+
+  </div>
+  <div class="legal-footer legal-footer-landing" style="margin-top:auto;">
+    <span>&copy; 2026 Afterwards &middot; Yari Blanco</span>
+    <button onclick="goTo('landing')">Back to Afterwards</button>
+    <button onclick="goTo('our-story')">Our Story</button>
+    <button onclick="goTo('privacy-policy')">Privacy Policy</button>
+    <button onclick="goTo('terms-of-service')">Terms of Service</button>
+    <a href="https://www.instagram.com/theafterwards.co/" target="_blank" class="footer-social">Instagram</a>
+    <a href="https://www.threads.com/@theafterwards.co" target="_blank" class="footer-social">Threads</a>
   </div>
 </div>
 
@@ -916,13 +1064,13 @@ function goTo(id) {
   const el = document.getElementById(id);
   if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
   // Refresh share link when wishlist page is shown
-  if (id === 'wishlist-page' && window.currentWishlistUrl) {
+  if (id === 'wishlist-page' && window.currentRegistryUrl) {
     const shareEl = document.getElementById('share-link-input');
-    if (shareEl) shareEl.value = window.currentWishlistUrl;
+    if (shareEl) shareEl.value = window.currentRegistryUrl;
   }
   // Reload tasks from Firebase when returning to wishlist page
-  if (id === 'wishlist-page' && window.currentShareToken && typeof window.loadWishlistByToken === 'function') {
-    window.loadWishlistByToken(window.currentShareToken).then(data => {
+  if (id === 'wishlist-page' && window.currentShareToken && typeof window.loadRegistryByToken === 'function') {
+    window.loadRegistryByToken(window.currentShareToken).then(data => {
       if (data) {
         state.selectedTasks = data.tasks.map(t => ({
           id: t.id, name: t.name, category: t.category,
@@ -931,7 +1079,7 @@ function goTo(id) {
           claimedBy: t.claimedBy, claimerEmail: t.claimerEmail || '',
           customScript: t.customScript || ''
         }));
-        window.renderWishlistPage();
+        window.renderRegistryPage();
       }
     });
   }
@@ -947,7 +1095,7 @@ function goToSupporterView() {
     ];
     document.getElementById('wishlist-owner-name').textContent = 'Friend';
   }
-  renderWishlistPage();
+  renderRegistryPage();
   goTo('wishlist-page');
 }
 
@@ -1112,22 +1260,22 @@ function renderSidebar() {
   });
 }
 
-function generateWishlist() {
+function generateRegistry() {
   const name = state.user.name || 'Friend';
   document.getElementById('wishlist-owner-name').textContent = name.split(' ')[0];
   document.getElementById('wishlist-page-sub').textContent = 'These are the ways people can help ' + name.split(' ')[0] + ' right now.';
 
-  // ── EDIT MODE: if a wishlist already exists, just save any new tasks ───
-  if (window.currentWishlistId && window.currentShareToken) {
-    window.isWishlistOwner = true;
-    saveNewTasksToExistingWishlist();
-    renderWishlistPage();
+  // ── EDIT MODE: if a registry already exists, just save any new tasks ───
+  if (window.currentRegistryId && window.currentShareToken) {
+    window.isRegistryOwner = true;
+    saveNewTasksToExistingRegistry();
+    renderRegistryPage();
     goTo('wishlist-page');
     return;
   }
 
   // New wishlist — mark as owner immediately before async save
-  window.isWishlistOwner = true;
+  window.isRegistryOwner = true;
 
   const userData = {
     name: state.user.name,
@@ -1158,8 +1306,8 @@ function generateWishlist() {
           console.log('Share URL generated:', shareUrl);
           // Store token globally so it persists
           window.currentShareToken = result.shareToken;
-          window.currentWishlistUrl = shareUrl;
-          window.isWishlistOwner = true; // This session created this wishlist
+          window.currentRegistryUrl = shareUrl;
+          window.isRegistryOwner = true; // This session created this registry
           // Update the input field
           const el = document.getElementById('share-link-input');
           if (el) {
@@ -1185,12 +1333,12 @@ function generateWishlist() {
   }
   trySaveToFirebase(10);
 
-  renderWishlistPage();
+  renderRegistryPage();
   goTo('wishlist-page');
 }
 
-window.renderWishlistPage = function() {
-  const isOwner = window.isWishlistOwner || false;
+window.renderRegistryPage = function() {
+  const isOwner = window.isRegistryOwner || false;
   const ownerFirstName = (state.user.name || 'friend').split(' ')[0];
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
@@ -1212,10 +1360,10 @@ window.renderWishlistPage = function() {
 
   // Update copy based on view
   if (isOwner) {
-    if (pageTitle) pageTitle.textContent = 'Your Afterwards Wishlist';
+    if (pageTitle) pageTitle.textContent = 'Your Afterwards Registry';
     if (pageSub) pageSub.textContent = 'These are the ways your community can support you right now.';
   } else {
-    if (pageTitle) pageTitle.textContent = ownerFirstName + '\'s Afterwards Wishlist';
+    if (pageTitle) pageTitle.textContent = ownerFirstName + '\'s Afterwards Registry';
     if (pageSub) pageSub.innerHTML = 'You are here because someone you care about is grieving.<br>Choose a task below and show up for them.';
   }
 
@@ -1329,7 +1477,7 @@ function markComplete(taskId) {
       }
     }
   }
-  window.renderWishlistPage();
+  window.renderRegistryPage();
 }
 
 function showOwnershipPrompt() {
@@ -1345,20 +1493,20 @@ async function verifyOwnership() {
   const inputEmail = (document.getElementById('ownership-email').value || '').trim().toLowerCase();
   if (!inputEmail) return;
 
-  if (!window.currentWishlistId && !window.currentShareToken) return;
+  if (!window.currentRegistryId && !window.currentShareToken) return;
 
   // Load wishlist from Firebase and check email
   try {
-    const data = window.currentShareToken && typeof window.loadWishlistByToken === 'function'
-      ? await window.loadWishlistByToken(window.currentShareToken)
+    const data = window.currentShareToken && typeof window.loadRegistryByToken === 'function'
+      ? await window.loadRegistryByToken(window.currentShareToken)
       : null;
 
     if (data && data.wishlist.ownerEmail && data.wishlist.ownerEmail.toLowerCase() === inputEmail) {
       // Verified — unlock owner view
-      window.isWishlistOwner = true;
+      window.isRegistryOwner = true;
       document.getElementById('ownership-prompt').style.display = 'none';
       document.getElementById('claim-ownership-wrap').style.display = 'none';
-      window.renderWishlistPage();
+      window.renderRegistryPage();
     } else {
       document.getElementById('ownership-error').style.display = 'block';
     }
@@ -1387,12 +1535,12 @@ function enterEditMode() {
   }, 50);
 }
 
-async function saveNewTasksToExistingWishlist() {
-  if (typeof window.addTasksToWishlist === 'function') {
+async function saveNewTasksToExistingRegistry() {
+  if (typeof window.addTasksToRegistry === 'function') {
     // Only save tasks that don't have a Firestore-style long ID yet (newly added ones)
     const newTasks = state.selectedTasks.filter(t => String(t.id).indexOf('.') !== -1);
     if (newTasks.length > 0) {
-      await window.addTasksToWishlist(window.currentWishlistId, newTasks);
+      await window.addTasksToRegistry(window.currentRegistryId, newTasks);
     }
   }
 }
@@ -1571,16 +1719,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.ac
 window.addEventListener('load', async () => {
   const params = new URLSearchParams(window.location.search);
   const token = params.get('wishlist');
-  if (token && typeof window.loadWishlistByToken === 'function') {
-    const data = await window.loadWishlistByToken(token);
+  if (token && typeof window.loadRegistryByToken === 'function') {
+    const data = await window.loadRegistryByToken(token);
     if (data) {
-      window.currentWishlistId = data.wishlist.id;
+      window.currentRegistryId = data.wishlist.id;
       window.currentShareToken = token;
-      window.currentWishlistUrl = window.location.href;
+      window.currentRegistryUrl = window.location.href;
       // Check if viewer is the owner by comparing ownerEmail to session email
       const sessionEmail = document.getElementById('f-email') ? document.getElementById('f-email').value.trim().toLowerCase() : '';
       const wishlistOwnerEmail = (data.wishlist.ownerEmail || '').toLowerCase();
-      window.isWishlistOwner = !!(sessionEmail && wishlistOwnerEmail && sessionEmail === wishlistOwnerEmail);
+      window.isRegistryOwner = !!(sessionEmail && wishlistOwnerEmail && sessionEmail === wishlistOwnerEmail);
       // Also store owner name for supporter view
       state.user.name = data.wishlist.ownerName || '';
       state.user.email = data.wishlist.ownerEmail || '';
@@ -1588,15 +1736,15 @@ window.addEventListener('load', async () => {
       state.user.name = data.wishlist.ownerName || '';
       state.user.email = data.wishlist.ownerEmail || '';
       // Mark as owner so griever-only elements show correctly
-      window.isWishlistOwner = false; // supporter by default
-      // Only mark as owner if this session generated this wishlist
+      window.isRegistryOwner = false; // supporter by default
+      // Only mark as owner if this session generated this registry
       const editBtn = document.getElementById('edit-wishlist-btn');
       if (editBtn) editBtn.style.display = 'none';
       const ownerName = data.wishlist.ownerName || 'Friend';
       document.getElementById('wishlist-owner-name').textContent = ownerName.split(' ')[0];
       document.getElementById('wishlist-page-sub').textContent = 'These are the ways people can help ' + ownerName.split(' ')[0] + ' right now.';
       document.getElementById('share-link-input').value = window.location.href;
-      window.renderWishlistPage();
+      window.renderRegistryPage();
       goTo('wishlist-page');
     }
   }
@@ -1649,7 +1797,7 @@ window.saveToFirebase = async function(userData, tasks) {
       for (const task of tasks) {
         await addDoc(collection(db, "tasks"), { wishlistId: wishlistRef.id, name: task.name, category: task.category, date: task.date || '', timeOfDay: task.timeOfDay || 'Flexible', delivery: task.delivery || 'Any', location: task.location || '', customScript: task.customScript || '', status: 'open', claimedBy: null, claimerEmail: null, createdAt: serverTimestamp() });
       }
-      window.currentWishlistId = wishlistRef.id;
+      window.currentRegistryId = wishlistRef.id;
       window.currentShareToken = shareToken;
       window.currentUserId = userRef.id;
       const shareUrl = window.location.origin + '?wishlist=' + shareToken;
@@ -1668,7 +1816,7 @@ window.saveToFirebase = async function(userData, tasks) {
     } catch (e) { console.error('Firebase save error:', e); showError(); return null; }
   };
 
-  window.loadWishlistByToken = async function(token) {
+  window.loadRegistryByToken = async function(token) {
     try {
       const q = query(collection(db, "wishlists"), where("shareToken", "==", token));
       const snap = await getDocs(q);
@@ -1679,7 +1827,7 @@ window.saveToFirebase = async function(userData, tasks) {
     } catch (e) { console.error('Load error:', e); return null; }
   };
 
-  window.addTasksToWishlist = async function(wishlistId, newTasks) {
+  window.addTasksToRegistry = async function(wishlistId, newTasks) {
     try {
       for (const task of newTasks) {
         await addDoc(collection(db, "tasks"), {
@@ -1749,7 +1897,7 @@ window.saveToFirebase = async function(userData, tasks) {
 
   window.saveFeedback = async function(type, response) {
     try {
-      await addDoc(collection(db, "feedback"), { userId: window.currentUserId || null, wishlistId: window.currentWishlistId || null, type, response, createdAt: serverTimestamp() });
+      await addDoc(collection(db, "feedback"), { userId: window.currentUserId || null, wishlistId: window.currentRegistryId || null, type, response, createdAt: serverTimestamp() });
     } catch (e) { console.error('Feedback error:', e); }
   };
 
