@@ -1982,13 +1982,16 @@ window.saveToFirebase = async function(userData, tasks) {
       const el = document.getElementById('share-link-input');
       if (el) el.value = shareUrl;
 
-      // ── Fire Loops griever welcome email ──────────────────────────────
-      callLoops({
-        event: 'griever_signup',
-        email: userData.email,
-        firstName: userData.name ? userData.name.split(' ')[0] : 'friend',
-        wishlistUrl: shareUrl,
-      });
+      // ── Fire Loops griever welcome email (only for griever-created registries) ──
+      // For friend-created registries, the claim invite email is sent separately
+      if (userData.registryType !== 'friend-handoff') {
+        callLoops({
+          event: 'griever_signup',
+          email: userData.email,
+          firstName: userData.name ? userData.name.split(' ')[0] : 'friend',
+          wishlistUrl: shareUrl,
+        });
+      }
 
       return { wishlistId: wishlistRef.id, shareToken, userId: userRef.id };
     } catch (e) { console.error('Firebase save error:', e); showError(); return null; }
