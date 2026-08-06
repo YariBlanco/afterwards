@@ -1499,7 +1499,7 @@ window.renderRegistryPage = function() {
       if (pageTitle) pageTitle.textContent = 'A registry for ' + ownerFirstName;
       if (pageSub) {
         if (!window.registryClaimed) {
-          pageSub.innerHTML = '<em style="color: var(--coral);">This registry is waiting for ' + ownerFirstName + ' to claim and finish setting up.</em><br><br>You built this with care. Copy the link below to share it.';
+          pageSub.innerHTML = '<div style="font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 16px;">This registry is waiting for ' + ownerFirstName + ' to claim and finish setting up.</div><div>You\'ve started something meaningful. Once they claim it, they\'ll add their details and you can help them share it with their community.</div>';
         } else {
           pageSub.textContent = 'You built this with care. Copy the link below to share it, or wait for ' + ownerFirstName + ' to claim it.';
         }
