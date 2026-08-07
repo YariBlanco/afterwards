@@ -1687,19 +1687,61 @@ window.renderRegistryPage = function() {
   
   if (banner && window.showClaimSuccessBanner) {
     banner.style.display = 'block';
-    if (buttonWrapper) buttonWrapper.style.display = 'none';
-    if (pageTitle) pageTitle.style.display = 'none';
-    if (pageSub) pageSub.style.display = 'none';
-    if (shareBar) shareBar.style.display = 'none';
-    if (taskCards) taskCards.style.display = 'none';
+    if (buttonWrapper) {
+      buttonWrapper.style.display = 'none';
+      buttonWrapper.style.visibility = 'hidden';
+      buttonWrapper.style.pointerEvents = 'none';
+    }
+    if (pageTitle) {
+      pageTitle.style.display = 'none';
+      pageTitle.style.visibility = 'hidden';
+    }
+    if (pageSub) {
+      pageSub.style.display = 'none';
+      pageSub.style.visibility = 'hidden';
+    }
+    if (shareBar) {
+      shareBar.style.display = 'none';
+      shareBar.style.visibility = 'hidden';
+      shareBar.style.pointerEvents = 'none';
+    }
+    if (taskCards) {
+      taskCards.style.display = 'none';
+      taskCards.style.visibility = 'hidden';
+    }
+    const contentWrapper = document.querySelector('.wishlist-page-content');
+    if (contentWrapper) {
+      contentWrapper.style.display = 'none';
+    }
     window.showClaimSuccessBanner = false; // Only show once
   } else if (banner) {
     banner.style.display = 'none';
-    if (buttonWrapper) buttonWrapper.style.display = 'flex';
-    if (pageTitle) pageTitle.style.display = 'block';
-    if (pageSub) pageSub.style.display = 'block';
-    if (shareBar) shareBar.style.display = 'block';
-    if (taskCards) taskCards.style.display = 'block';
+    if (buttonWrapper) {
+      buttonWrapper.style.display = 'flex';
+      buttonWrapper.style.visibility = 'visible';
+      buttonWrapper.style.pointerEvents = 'auto';
+    }
+    if (pageTitle) {
+      pageTitle.style.display = 'block';
+      pageTitle.style.visibility = 'visible';
+    }
+    if (pageSub) {
+      pageSub.style.display = 'block';
+      pageSub.style.visibility = 'visible';
+    }
+    if (shareBar) {
+      shareBar.style.display = 'block';
+      shareBar.style.visibility = 'visible';
+      shareBar.style.pointerEvents = 'auto';
+    }
+    if (taskCards) {
+      taskCards.style.display = 'block';
+      taskCards.style.visibility = 'visible';
+    }
+    const contentWrapper = document.querySelector('.wishlist-page-content');
+    if (contentWrapper) {
+      contentWrapper.style.display = 'block';
+    }
   }
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
