@@ -2044,6 +2044,12 @@ window.addEventListener('load', async () => {
       window.currentRegistryUrl = window.location.href;
       window.registryClaimed = data.wishlist.claimed || false;
       window.isFriendBuilt = data.wishlist.registryType === 'friend-handoff' || data.wishlist.registryType === 'friend-managed' || false;
+      
+      console.log('DEBUG - Registry Data:');
+      console.log('registryType:', data.wishlist.registryType);
+      console.log('claimed:', data.wishlist.claimed);
+      console.log('isFriendBuilt:', window.isFriendBuilt);
+      console.log('registryClaimed:', window.registryClaimed);
       // Check if viewer is the owner by comparing ownerEmail to session email
       const sessionEmail = document.getElementById('f-email') ? document.getElementById('f-email').value.trim().toLowerCase() : '';
       const wishlistOwnerEmail = (data.wishlist.ownerEmail || '').toLowerCase();
