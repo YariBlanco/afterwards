@@ -1680,13 +1680,26 @@ window.renderRegistryPage = function() {
   // Show success banner if griever just claimed
   const banner = document.getElementById('claim-success-banner');
   const buttonWrapper = document.getElementById('button-wrapper');
+  const pageTitle = document.getElementById('wishlist-owner-name');
+  const pageSub = document.getElementById('wishlist-page-sub');
+  const shareBar = document.getElementById('share-link-wrap');
+  const taskCards = document.getElementById('task-cards-list');
+  
   if (banner && window.showClaimSuccessBanner) {
     banner.style.display = 'block';
     if (buttonWrapper) buttonWrapper.style.display = 'none';
+    if (pageTitle) pageTitle.style.display = 'none';
+    if (pageSub) pageSub.style.display = 'none';
+    if (shareBar) shareBar.style.display = 'none';
+    if (taskCards) taskCards.style.display = 'none';
     window.showClaimSuccessBanner = false; // Only show once
   } else if (banner) {
     banner.style.display = 'none';
     if (buttonWrapper) buttonWrapper.style.display = 'flex';
+    if (pageTitle) pageTitle.style.display = 'block';
+    if (pageSub) pageSub.style.display = 'block';
+    if (shareBar) shareBar.style.display = 'block';
+    if (taskCards) taskCards.style.display = 'block';
   }
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
