@@ -551,7 +551,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
         They've created a space where your community can see exactly how to help.<br><br>
         Now it's time to make it yours. You'll add your details so everyone knows how to show up for you the right way.
       </p>
-      <button class="btn-landing-primary" onclick="window.isClaimingRegistry = true; window.history.replaceState({}, document.title, window.location.pathname); currentStep = 1; goTo('onboarding'); setTimeout(() => showStep(1), 50);" style="width: 100%; max-width: 280px; padding: 16px 32px; font-size: 16px;">Let's do this →</button>
+      <button class="btn-landing-primary" onclick="showOnboardingForClaim();" style="width: 100%; max-width: 280px; padding: 16px 32px; font-size: 16px;">Let's do this →</button>
     </div>
   </div>
 </div>
@@ -1225,6 +1225,14 @@ function showSuccessMessage(message) {
   msgDiv.textContent = message;
   document.body.appendChild(msgDiv);
   setTimeout(() => msgDiv.remove(), 3000);
+}
+
+function showOnboardingForClaim() {
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  document.getElementById('onboarding').style.display = 'block';
+  window.isClaimingRegistry = true;
+  currentStep = 1;
+  showStep(1);
 }
 
 function startClaimingRegistry() {
