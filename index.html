@@ -2129,7 +2129,15 @@ window.saveToFirebase = async function(userData, tasks) {
     try {
       const userRef = await addDoc(collection(db, "users"), { ...userData, createdAt: serverTimestamp() });
       const shareToken = generateToken();
-      const wishlistRef = await addDoc(collection(db, "wishlists"), { userId: userRef.id, shareToken, ownerName: userData.name, ownerEmail: userData.email, createdAt: serverTimestamp() });
+      const wishlistRef = await addDoc(collection(db, "wishlists"), { 
+        userId: userRef.id, 
+        shareToken, 
+        ownerName: userData.name, 
+        ownerEmail: userData.email, 
+        registryType: userData.registryType || 'self',
+        claimed: userData.registryType === 'friend-handoff' ? false : true,
+        createdAt: serverTimestamp() 
+      });
       for (const task of tasks) {
         await addDoc(collection(db, "tasks"), { wishlistId: wishlistRef.id, name: task.name, category: task.category, date: task.date || '', timeOfDay: task.timeOfDay || 'Flexible', delivery: task.delivery || 'Any', location: task.location || '', customScript: task.customScript || '', status: 'open', claimedBy: null, claimerEmail: null, createdAt: serverTimestamp() });
       }
