@@ -548,7 +548,8 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
     <div style="max-width: 500px; text-align: center;">
       <h2 class="form-title" style="margin-bottom: 24px;">Someone who loves you started this.</h2>
       <p class="form-subtitle" style="margin-bottom: 32px; font-size: 15px; line-height: 1.6;">
-        It's yours now. Let's finish it together.
+        It's yours now. Let's finish it together.<br><br>
+        When you're done, you'll get a link to share your registry with the people who want to show up for you.
       </p>
       <button class="btn-landing-primary" onclick="showOnboardingForClaim();" style="width: 100%; max-width: 280px; padding: 16px 32px; font-size: 16px;">Let's do it →</button>
     </div>
@@ -783,6 +784,10 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 <!-- ==================== WISHLIST PAGE ==================== -->
 <div id="wishlist-page" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
+  <div id="claim-success-banner" style="display:none; background: linear-gradient(135deg, var(--peach), var(--coral)); color: var(--text-primary); padding: 20px; margin: 20px; border-radius: 8px; text-align: center;">
+    <p style="font-weight: 600; margin: 0; font-size: 16px;">Your registry is live.</p>
+    <p style="font-size: 14px; margin: 8px 0 0 0; line-height: 1.5;">A welcome email is on its way with everything you need to share it with your community. Check your inbox — and check your spam just in case.</p>
+  </div>
   <div class="wishlist-page-content">
     <h2 class="wishlist-page-title"><em id="wishlist-owner-name">Your Afterwards Registry</em></h2>
     <p class="wishlist-page-sub" id="wishlist-page-sub">These are the ways people can help right now.</p>
@@ -1201,15 +1206,11 @@ async function claimRegistry(email, name, pronouns, city, relationToDeceased, lo
         window.registryClaimed = true;
         window.isRegistryOwner = true;
         state.user.email = email;
+        window.showClaimSuccessBanner = true;
         
-        // Show success message
-        showSuccessMessage('Welcome! Your registry is now live.');
-        
-        // Update UI and redirect after a short delay so message is visible
-        setTimeout(() => {
-          window.renderRegistryPage();
-          goTo('wishlist-page');
-        }, 500);
+        // Update UI and redirect
+        window.renderRegistryPage();
+        goTo('wishlist-page');
       } else {
         console.error('Failed to update registry');
         showError();
@@ -1596,6 +1597,15 @@ window.renderRegistryPage = function() {
   const isFriendBuilt = window.isFriendBuilt || false;
   const grieverName = window.friendGrieverName || state.user.name || 'friend';
   const ownerFirstName = grieverName.split(' ')[0];
+
+  // Show success banner if griever just claimed
+  const banner = document.getElementById('claim-success-banner');
+  if (banner && window.showClaimSuccessBanner) {
+    banner.style.display = 'block';
+    window.showClaimSuccessBanner = false; // Only show once
+  } else if (banner) {
+    banner.style.display = 'none';
+  }
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
   const dashBtn = document.querySelector('.view-wishlist-btn');
