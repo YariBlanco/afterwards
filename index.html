@@ -551,7 +551,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
         They've created a space where your community can see exactly how to help.<br><br>
         Now it's time to make it yours. You'll add your details so everyone knows how to show up for you the right way.
       </p>
-      <button class="btn-landing-primary" onclick="startClaimingRegistry()" style="width: 100%; max-width: 280px; padding: 16px 32px; font-size: 16px;">Let's do this →</button>
+      <button class="btn-landing-primary" onclick="window.isClaimingRegistry = true; currentStep = 1; setTimeout(() => { goTo('onboarding'); showStep(1); }, 100);" style="width: 100%; max-width: 280px; padding: 16px 32px; font-size: 16px;">Let's do this →</button>
     </div>
   </div>
 </div>
@@ -2026,10 +2026,10 @@ window.addEventListener('load', async () => {
       document.getElementById('share-link-input').value = window.location.href;
       window.renderRegistryPage();
       
-      // If this is an unclaimed friend-built registry, show claim prompt instead
-      if (window.isFriendBuilt && !window.registryClaimed) {
+      // If this is an unclaimed friend-built registry AND we're not already claiming, show claim prompt
+      if (window.isFriendBuilt && !window.registryClaimed && !window.isClaimingRegistry) {
         goTo('claim-prompt');
-      } else {
+      } else if (!window.isClaimingRegistry) {
         goTo('wishlist-page');
       }
     }
