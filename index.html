@@ -622,7 +622,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
         <div class="field-group"><label class="field-label">Pets at home <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-pets" type="text" placeholder="e.g. Two friendly dogs. Cat hides. Side gate unlocked."></div>
         <div class="field-group"><label class="field-label">Home access <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><input class="field-input" id="f-access" type="text" placeholder="e.g. Leave bags on porch, gate code 4421, side door"></div>
         <div class="field-group"><label class="field-label">Anything else supporters should know <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;">(optional)</span></label><textarea class="field-textarea" id="f-notes" placeholder="e.g. Kids are home after 3pm. No need to linger unless I invite you in."></textarea></div>
-        <div class="form-nav"><button class="btn-back" onclick="nextStep(3)">&#8592; Back</button><button class="btn-continue" onclick="completeOnboarding()">Create My Registry &rarr;</button></div>
+        <div class="form-nav"><button class="btn-back" onclick="nextStep(3)">&#8592; Back</button><button class="btn-continue" id="complete-btn" onclick="handleCompleteClick()">Create My Registry &rarr;</button></div>
       </div>
     </div>
   </div>
@@ -1147,6 +1147,20 @@ function nextStep(step) {
   document.getElementById('dot-' + step).classList.add('active');
 }
 
+async function handleCompleteClick() {
+  const btn = document.getElementById('complete-btn');
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+  
+  try {
+    await completeOnboarding();
+  } catch (error) {
+    console.error('Error completing onboarding:', error);
+    btn.disabled = false;
+    btn.textContent = 'Create My Registry →';
+  }
+}
+
 async function completeOnboarding() {
   const name = document.getElementById('f-name').value.trim() || 'friend';
   const email = document.getElementById('f-email').value.trim();
@@ -1208,9 +1222,12 @@ async function claimRegistry(email, name, pronouns, city, relationToDeceased, lo
         state.user.email = email;
         window.showClaimSuccessBanner = true;
         
-        // Update UI and redirect
+        // Update UI
         window.renderRegistryPage();
-        goTo('wishlist-page');
+        
+        // Redirect directly without using goTo() which tries to call showStep
+        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+        document.getElementById('wishlist-page').style.display = 'block';
       } else {
         console.error('Failed to update registry');
         showError();
