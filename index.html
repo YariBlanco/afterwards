@@ -1229,8 +1229,17 @@ function showSuccessMessage(message) {
 
 function startClaimingRegistry() {
   window.isClaimingRegistry = true;
-  goTo('onboarding');
   currentStep = 1;
+  
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  
+  // Show onboarding
+  const onboardingScreen = document.getElementById('onboarding');
+  if (onboardingScreen) {
+    onboardingScreen.style.display = 'block';
+  }
+  
   showStep(1);
 }
 
