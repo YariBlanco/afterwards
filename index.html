@@ -676,6 +676,9 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
           <div class="detail-field"><label>Delivery method</label><select id="detail-delivery" id="detail-delivery"></select></div>
           <div class="detail-field"><label>Address / Link <span style="font-weight:300;text-transform:none;letter-spacing:0;">(opt.)</span></label><input type="text" id="detail-location" placeholder="Home address or Zoom link"></div>
         </div>
+        <div class="detail-row">
+          <div class="detail-field"><label>How many times?</label><input type="number" id="detail-quantity" value="1" min="1" max="10" style="width:80px;"></div>
+        </div>
         <div class="panel-actions">
           <button class="btn-save-detail" onclick="saveTaskDetail()">Add to My List &rarr;</button>
           <button class="btn-skip-detail" onclick="cancelDetail()">Add without details</button>
@@ -712,6 +715,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
           <div class="task-chip" onclick="toggleChip(this,'Drive to appointments','Transportation','transport')"><span class="chip-icon">+</span> Drive to appointments</div>
           <div class="task-chip" onclick="toggleChip(this,'Help with errands','Transportation','transport')"><span class="chip-icon">+</span> Help with errands</div>
           <div class="task-chip" onclick="toggleChip(this,'School pickup for kids','Transportation','transport')"><span class="chip-icon">+</span> School pickup for kids</div>
+          <div class="task-chip" onclick="toggleChip(this,'Activity pickup for kids','Transportation','transport')"><span class="chip-icon">+</span> Activity pickup for kids</div>
         </div>
       </div>
 
@@ -764,6 +768,9 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
         <div class="detail-row">
           <div class="detail-field"><label>Meeting link <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label><input type="text" id="custom-detail-link" placeholder="Zoom, Google Meet, etc."></div>
           <div class="detail-field"><label>Additional notes <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label><input type="text" id="custom-detail-notes" placeholder="Anything else to know?"></div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-field"><label>How many times?</label><input type="number" id="custom-detail-quantity" value="1" min="1" max="10" style="width:80px;"></div>
         </div>
         <div class="panel-actions">
           <button class="btn-save-detail" onclick="saveCustomTask()">Add to My List &rarr;</button>
@@ -1071,7 +1078,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 </div>
 
 <script>
-const supporterScripts = window.supporterScripts = {"Bring dinner for the family": "You don't need to stay \u2014 just drop it off and send a text. Something warm and easy to reheat is perfect. No need to knock if they'd rather rest.", "Drop off breakfast pastries": "Leave it at the door with a short note. You don't need words \u2014 your showing up says it all.", "Organize a meal train": "Coordinate with others so meals arrive on different days. A simple group text works great.", "Grocery shopping": "Ask for a list or grab the basics: bread, milk, easy snacks. Drop off without requiring a long conversation.", "Prepare freezer meals": "Soups, casseroles, pasta dishes freeze well. Label everything with the date and reheating instructions.", "Light housekeeping": "Focus on dishes, surfaces, trash, and laundry. Don't reorganize \u2014 just restore order. Let them know you're there.", "Laundry assistance": "Wash, fold, and return. Keep it simple and don't ask questions about what you find.", "Pet care / walking": "A daily walk or feeding visit takes real weight off. Be consistent \u2014 this is one of the most grounding things you can do.", "Childcare support": "Show up, engage the kids, take them out if possible so the adult can rest. Just be present with the children.", "Yard work": "Mow, rake, or tidy whatever's most visible. A cared-for exterior communicates that others are holding the space.", "Sort through loved one's belongings": "Move slowly and follow their lead. Ask before touching anything. Let them direct the pace entirely.", "Airport pickup / dropoff": "Be on time, have the address ready, and keep conversation light unless they want to talk. Silence is a gift too.", "Drive to appointments": "Offer to wait. Even if they say no, knowing someone is there changes the experience of hard appointments.", "Help with errands": "Offer a list or just ask: can I grab anything while I'm out? Small asks are easier to say yes to.", "School pickup for kids": "Confirm the plan the night before. Have a snack for the kids \u2014 it signals care without requiring anything from the parent.", "Help with paperwork": "Offer to sit with them, not do it for them. Having a witness to the hard administrative work is what matters most.", "Make phone calls": "Ask for a list of who to call and what to say. You can draft a script together. This is one of the most exhausting tasks \u2014 you can carry it.", "Research services": "Ask what they need help finding. Return with two or three concrete options, not a dump of links.", "Coordinate with others": "Be the point of contact so they don't have to repeat their story. Keep updates brief and protective of their privacy.", "Just sit and listen": "You don't need to fix anything. Ask: do you want advice or do you just need me to listen? Then honor what they say.", "Take a walk together": "Fresh air and movement help. Keep the pace easy and follow their lead on conversation. Silence on a walk is natural.", "Virtual check-in call": "Keep it short unless they want to talk longer. Lead with: I just wanted to check in \u2014 no pressure to talk. Then listen.", "Send encouraging notes": "Handwritten if you can. Don't say 'let me know if you need anything' \u2014 instead say 'I'm thinking of you and I'm here.'"};
+const supporterScripts = window.supporterScripts = {"Bring dinner for the family": "You don't need to stay \u2014 just drop it off and send a text. Something warm and easy to reheat is perfect. No need to knock if they'd rather rest.", "Drop off breakfast pastries": "Leave it at the door with a short note. You don't need words \u2014 your showing up says it all.", "Organize a meal train": "Coordinate with others so meals arrive on different days. A simple group text works great.", "Grocery shopping": "Ask for a list or grab the basics: bread, milk, easy snacks. Drop off without requiring a long conversation.", "Prepare freezer meals": "Soups, casseroles, pasta dishes freeze well. Label everything with the date and reheating instructions.", "Light housekeeping": "Focus on dishes, surfaces, trash, and laundry. Don't reorganize \u2014 just restore order. Let them know you're there.", "Laundry assistance": "Wash, fold, and return. Keep it simple and don't ask questions about what you find.", "Pet care / walking": "A daily walk or feeding visit takes real weight off. Be consistent \u2014 this is one of the most grounding things you can do.", "Childcare support": "Show up, engage the kids, take them out if possible so the adult can rest. Just be present with the children.", "Yard work": "Mow, rake, or tidy whatever's most visible. A cared-for exterior communicates that others are holding the space.", "Sort through loved one's belongings": "Move slowly and follow their lead. Ask before touching anything. Let them direct the pace entirely.", "Airport pickup / dropoff": "Be on time, have the address ready, and keep conversation light unless they want to talk. Silence is a gift too.", "Drive to appointments": "Offer to wait. Even if they say no, knowing someone is there changes the experience of hard appointments.", "Help with errands": "Offer a list or just ask: can I grab anything while I'm out? Small asks are easier to say yes to.", "School pickup for kids": "Confirm the plan the night before. Have a snack for the kids \u2014 it signals care without requiring anything from the parent. Remember to put the kids' names on any pickup list.", "Activity pickup for kids": "Coordinate timing and location. Have snacks ready, pick them up on time, and deliver them safely. Remember to put the kids' names on any pickup list.", "Help with paperwork": "Offer to sit with them, not do it for them. Having a witness to the hard administrative work is what matters most.", "Make phone calls": "Ask for a list of who to call and what to say. You can draft a script together. This is one of the most exhausting tasks \u2014 you can carry it.", "Research services": "Ask what they need help finding. Return with two or three concrete options, not a dump of links.", "Coordinate with others": "Be the point of contact so they don't have to repeat their story. Keep updates brief and protective of their privacy.", "Just sit and listen": "You don't need to fix anything. Ask: do you want advice or do you just need me to listen? Then honor what they say.", "Take a walk together": "Fresh air and movement help. Keep the pace easy and follow their lead on conversation. Silence on a walk is natural.", "Virtual check-in call": "Keep it short unless they want to talk longer. Lead with: I just wanted to check in \u2014 no pressure to talk. Then listen.", "Send encouraging notes": "Handwritten if you can. Don't say 'let me know if you need anything' \u2014 instead say 'I'm thinking of you and I'm here.'"};
 
 const deliveryOptions = {
   food: ['Leave on porch', 'Knock and say hi', 'Ring and drop off', 'Come inside'],
@@ -1365,6 +1372,7 @@ function toggleChip(el, taskName, category, deliveryType) {
   document.getElementById('detail-date').value = '';
   document.getElementById('detail-time').value = '';
   document.getElementById('detail-location').value = '';
+  document.getElementById('detail-quantity').value = '1';
   populateDelivery('detail-delivery', deliveryType || 'default');
   const panel = document.getElementById('active-detail-panel');
   panel.classList.add('visible');
@@ -1377,15 +1385,24 @@ function saveTaskDetail() {
   let dateLabel = '';
   if (date) { const d = new Date(date + 'T12:00:00'); dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   const customScript = document.getElementById('supporter-script-text').value.trim();
-  state.selectedTasks.push({
-    id: Date.now() + Math.random(),
-    name: state.pendingTask.name, category: state.pendingTask.category,
-    status: 'open', claimedBy: null, date: dateLabel,
-    timeOfDay: document.getElementById('detail-time').value || 'Flexible',
-    delivery: document.getElementById('detail-delivery').value || 'Any',
-    location: document.getElementById('detail-location').value,
-    customScript,
-  });
+  const quantity = parseInt(document.getElementById('detail-quantity').value) || 1;
+  
+  // Create multiple tasks based on quantity
+  for (let i = 0; i < quantity; i++) {
+    state.selectedTasks.push({
+      id: Date.now() + Math.random(),
+      name: state.pendingTask.name, 
+      category: state.pendingTask.category,
+      status: 'open', 
+      claimedBy: null, 
+      date: dateLabel,
+      timeOfDay: document.getElementById('detail-time').value || 'Flexible',
+      delivery: document.getElementById('detail-delivery').value || 'Any',
+      location: document.getElementById('detail-location').value,
+      customScript,
+    });
+  }
+  
   document.getElementById('active-detail-panel').classList.remove('visible');
   state.pendingTask = null;
   renderSidebar();
@@ -1394,7 +1411,24 @@ function saveTaskDetail() {
 function cancelDetail() {
   if (!state.pendingTask) return;
   const customScript = document.getElementById('supporter-script-text').value.trim();
-  state.selectedTasks.push({ id: Date.now() + Math.random(), name: state.pendingTask.name, category: state.pendingTask.category, status: 'open', claimedBy: null, date: '', timeOfDay: 'Flexible', delivery: 'Any', location: '', customScript });
+  const quantity = parseInt(document.getElementById('detail-quantity').value) || 1;
+  
+  // Create multiple tasks based on quantity
+  for (let i = 0; i < quantity; i++) {
+    state.selectedTasks.push({ 
+      id: Date.now() + Math.random(), 
+      name: state.pendingTask.name, 
+      category: state.pendingTask.category, 
+      status: 'open', 
+      claimedBy: null, 
+      date: '', 
+      timeOfDay: 'Flexible', 
+      delivery: 'Any', 
+      location: '', 
+      customScript 
+    });
+  }
+  
   document.getElementById('active-detail-panel').classList.remove('visible');
   state.pendingTask = null;
   renderSidebar();
@@ -1410,6 +1444,7 @@ function showCustomDetail() {
   const val = input.value.trim();
   if (!val) return;
   document.getElementById('custom-task-label').textContent = val;
+  document.getElementById('custom-detail-quantity').value = '1';
   document.getElementById('custom-detail-panel').classList.add('visible');
 }
 
@@ -1422,14 +1457,24 @@ function saveCustomTask() {
   const meetingLink = document.getElementById('custom-detail-link') ? document.getElementById('custom-detail-link').value : '';
   const extraNotes = document.getElementById('custom-detail-notes') ? document.getElementById('custom-detail-notes').value : '';
   const locationFull = [document.getElementById('custom-detail-location').value, meetingLink, extraNotes].filter(Boolean).join(' · ');
-  state.selectedTasks.push({
-    id: Date.now() + Math.random(), name, category: 'Custom',
-    status: 'open', claimedBy: null, date: dateLabel,
-    timeOfDay: document.getElementById('custom-detail-time').value || 'Flexible',
-    delivery: document.getElementById('custom-detail-delivery').value || 'Any',
-    location: locationFull,
-    customScript: '',
-  });
+  const quantity = parseInt(document.getElementById('custom-detail-quantity').value) || 1;
+  
+  // Create multiple tasks based on quantity
+  for (let i = 0; i < quantity; i++) {
+    state.selectedTasks.push({
+      id: Date.now() + Math.random(), 
+      name, 
+      category: 'Custom',
+      status: 'open', 
+      claimedBy: null, 
+      date: dateLabel,
+      timeOfDay: document.getElementById('custom-detail-time').value || 'Flexible',
+      delivery: document.getElementById('custom-detail-delivery').value || 'Any',
+      location: locationFull,
+      customScript: '',
+    });
+  }
+  
   document.getElementById('custom-task-input').value = '';
   document.getElementById('custom-detail-panel').classList.remove('visible');
   document.getElementById('custom-input-row').classList.remove('visible');
@@ -1439,7 +1484,24 @@ function saveCustomTask() {
 function saveCustomTaskNoDetail() {
   const name = document.getElementById('custom-task-input').value.trim();
   if (!name) return;
-  state.selectedTasks.push({ id: Date.now(), name, category: 'Custom', status: 'open', claimedBy: null, date: '', timeOfDay: 'Flexible', delivery: 'Any', location: '', customScript: '' });
+  const quantity = parseInt(document.getElementById('custom-detail-quantity').value) || 1;
+  
+  // Create multiple tasks based on quantity
+  for (let i = 0; i < quantity; i++) {
+    state.selectedTasks.push({ 
+      id: Date.now() + Math.random(), 
+      name, 
+      category: 'Custom', 
+      status: 'open', 
+      claimedBy: null, 
+      date: '', 
+      timeOfDay: 'Flexible', 
+      delivery: 'Any', 
+      location: '', 
+      customScript: '' 
+    });
+  }
+  
   document.getElementById('custom-task-input').value = '';
   document.getElementById('custom-detail-panel').classList.remove('visible');
   document.getElementById('custom-input-row').classList.remove('visible');
