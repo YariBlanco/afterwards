@@ -1229,18 +1229,21 @@ function showSuccessMessage(message) {
 
 function startClaimingRegistry() {
   window.isClaimingRegistry = true;
+  window.preventAutoRedirect = true;
   currentStep = 1;
   
-  // Hide all screens
-  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  // Directly navigate using goTo
+  goTo('onboarding');
   
-  // Show onboarding
-  const onboardingScreen = document.getElementById('onboarding');
-  if (onboardingScreen) {
-    onboardingScreen.style.display = 'block';
-  }
-  
-  showStep(1);
+  // Force show step 1 after a tiny delay to ensure DOM is ready
+  setTimeout(() => {
+    showStep(1);
+    // Make sure only step 1 is visible
+    document.querySelectorAll('.form-step').forEach(step => {
+      step.classList.remove('active');
+    });
+    document.getElementById('step-1').classList.add('active');
+  }, 100);
 }
 
 function startFriendRegistry() {
