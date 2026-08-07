@@ -1228,6 +1228,16 @@ function showSuccessMessage(message) {
 }
 
 function showOnboardingForClaim() {
+  // Store the current registry info
+  window.storedRegistryId = window.currentRegistryId;
+  window.storedShareToken = window.currentShareToken;
+  window.storedRegistryClaimed = window.registryClaimed;
+  window.storedIsFriendBuilt = window.isFriendBuilt;
+  
+  // Clear the URL parameter to prevent page load from redirecting
+  window.history.replaceState({}, document.title, window.location.pathname);
+  
+  // Now show onboarding
   document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
   document.getElementById('onboarding').style.display = 'block';
   window.isClaimingRegistry = true;
@@ -2003,6 +2013,11 @@ document.getElementById('claim-modal').addEventListener('click', function(e) { i
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.activeElement === document.getElementById('custom-task-input')) addCustomTask(); });
 
 window.addEventListener('load', async () => {
+  // Skip auto-load if user is currently claiming a registry
+  if (window.isClaimingRegistry) {
+    return;
+  }
+  
   const params = new URLSearchParams(window.location.search);
   const token = params.get('registry');
   if (token && typeof window.loadRegistryByToken === 'function') {
