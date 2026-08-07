@@ -1147,7 +1147,7 @@ function nextStep(step) {
   document.getElementById('dot-' + step).classList.add('active');
 }
 
-function completeOnboarding() {
+async function completeOnboarding() {
   const name = document.getElementById('f-name').value.trim() || 'friend';
   const email = document.getElementById('f-email').value.trim();
   const pronouns = document.getElementById('f-pronouns').value.trim();
@@ -1166,9 +1166,9 @@ function completeOnboarding() {
   state.user.notes = document.getElementById('f-notes').value.trim();
   document.getElementById('greeting-name').textContent = name.split(' ')[0];
   
-  // If claiming a friend-built registry, call claimRegistry
+  // If claiming a friend-built registry, call claimRegistry and wait for it
   if (window.isClaimingRegistry && window.currentRegistryId && window.currentShareToken) {
-    claimRegistry(email, name, pronouns, city, relation, role, feeling);
+    await claimRegistry(email, name, pronouns, city, relation, role, feeling);
   } else {
     // Otherwise go to task builder (for creating new registry)
     goTo('wishlist-builder');
