@@ -1228,21 +1228,18 @@ function showSuccessMessage(message) {
 }
 
 function showOnboardingForClaim() {
-  // Store the current registry info
+  // Store the registry info
   window.storedRegistryId = window.currentRegistryId;
   window.storedShareToken = window.currentShareToken;
-  window.storedRegistryClaimed = window.registryClaimed;
-  window.storedIsFriendBuilt = window.isFriendBuilt;
   
-  // Clear the URL parameter to prevent page load from redirecting
-  window.history.replaceState({}, document.title, window.location.pathname);
-  
-  // Now show onboarding
-  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-  document.getElementById('onboarding').style.display = 'block';
+  // Set flag BEFORE reloading
   window.isClaimingRegistry = true;
-  currentStep = 1;
-  showStep(1);
+  sessionStorage.setItem('isClaimingRegistry', 'true');
+  sessionStorage.setItem('registryId', window.currentRegistryId);
+  sessionStorage.setItem('shareToken', window.currentShareToken);
+  
+  // Reload the page without the registry parameter
+  window.location.href = window.location.pathname;
 }
 
 function startClaimingRegistry() {
@@ -2013,6 +2010,25 @@ document.getElementById('claim-modal').addEventListener('click', function(e) { i
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.activeElement === document.getElementById('custom-task-input')) addCustomTask(); });
 
 window.addEventListener('load', async () => {
+  // Check if we're resuming a claim flow
+  if (sessionStorage.getItem('isClaimingRegistry') === 'true') {
+    window.currentRegistryId = sessionStorage.getItem('registryId');
+    window.currentShareToken = sessionStorage.getItem('shareToken');
+    window.isClaimingRegistry = true;
+    
+    // Clear the session storage
+    sessionStorage.removeItem('isClaimingRegistry');
+    sessionStorage.removeItem('registryId');
+    sessionStorage.removeItem('shareToken');
+    
+    // Show onboarding
+    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+    document.getElementById('onboarding').style.display = 'block';
+    currentStep = 1;
+    showStep(1);
+    return;
+  }
+  
   // Skip auto-load if user is currently claiming a registry
   if (window.isClaimingRegistry) {
     return;
