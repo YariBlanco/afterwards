@@ -542,7 +542,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
 </div>
 
 <!-- ==================== CLAIM PROMPT ==================== -->
-<div id="claim-prompt" class="screen" style="display: none;">
+<div id="claim-prompt" class="screen">
   <nav class="nav"><span class="nav-wordmark">Afterwards</span></nav>
   <div class="onboarding-container" style="justify-content: center; padding: 60px 20px;">
     <div style="max-width: 500px; text-align: center;">
@@ -1509,7 +1509,7 @@ function generateRegistry() {
           const result = await window.saveToFirebase(userData, state.selectedTasks);
           console.log('Firebase save result:', result);
           if (result && result.shareToken) {
-            const shareUrl = window.location.origin + '?wishlist=' + result.shareToken;
+            const shareUrl = window.location.origin + '?registry=' + result.shareToken;
             console.log('Share URL generated:', shareUrl);
             // Store token globally so it persists
             window.currentShareToken = result.shareToken;
@@ -1984,7 +1984,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.ac
 
 window.addEventListener('load', async () => {
   const params = new URLSearchParams(window.location.search);
-  const token = params.get('wishlist');
+  const token = params.get('registry');
   if (token && typeof window.loadRegistryByToken === 'function') {
     const data = await window.loadRegistryByToken(token);
     if (data) {
@@ -2079,7 +2079,7 @@ window.saveToFirebase = async function(userData, tasks) {
       window.currentRegistryId = wishlistRef.id;
       window.currentShareToken = shareToken;
       window.currentUserId = userRef.id;
-      const shareUrl = window.location.origin + '?wishlist=' + shareToken;
+      const shareUrl = window.location.origin + '?registry=' + shareToken;
       const el = document.getElementById('share-link-input');
       if (el) el.value = shareUrl;
 
