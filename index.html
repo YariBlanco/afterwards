@@ -797,7 +797,7 @@ body { font-family: 'ClashDisplay', sans-serif; background: var(--cream); color:
       <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copy Link</button>
     </div>
     <div class="task-cards" id="task-cards-list"></div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div id="button-wrapper" style="display:flex; gap:10px; flex-wrap:wrap;">
       <button class="view-wishlist-btn" onclick="goTo('dashboard')">&#9825; View My Dashboard</button>
       <button class="view-wishlist-btn" id="edit-wishlist-btn" onclick="enterEditMode()" style="display:none; border-color:var(--periwinkle); color:var(--periwinkle);">+ Add More to My Registry</button>
     </div>
@@ -1617,11 +1617,14 @@ window.renderRegistryPage = function() {
 
   // Show success banner if griever just claimed
   const banner = document.getElementById('claim-success-banner');
+  const buttonWrapper = document.getElementById('button-wrapper');
   if (banner && window.showClaimSuccessBanner) {
     banner.style.display = 'block';
+    if (buttonWrapper) buttonWrapper.style.display = 'none';
     window.showClaimSuccessBanner = false; // Only show once
   } else if (banner) {
     banner.style.display = 'none';
+    if (buttonWrapper) buttonWrapper.style.display = 'flex';
   }
 
   // ── Show/hide owner-only elements ──────────────────────────────────────
